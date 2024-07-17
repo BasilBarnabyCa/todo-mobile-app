@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TodoIt</string>
+    <string name="app_title_text">Todo.iT</string>
+    <string name="slogan_text">Track it, finish it!</string>
 </resources>

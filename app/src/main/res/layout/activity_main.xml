@@ -6,7 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_dark"
+    android:paddingTop="@dimen/main_padding_y"
+    android:paddingBottom="0dp"
+    android:paddingStart="@dimen/main_padding_x"
+    android:paddingEnd="@dimen/main_padding_x"
     tools:context=".MainActivity">
 
 
+    <LinearLayout
+        android:id="@+id/headerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/appTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="@dimen/app_title_text_height"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/app_title_text"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/app_title_text_size" />
+
+        <TextView
+            android:id="@+id/sloganTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/slogan_text"
+            android:textAlignment="center"
+            android:textColor="@color/gray_text_color" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

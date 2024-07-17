@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="main_padding_y">5dp</dimen>
+    <dimen name="main_padding_x">10dp</dimen>
+    <dimen name="app_title_text_size">30sp</dimen>
+    <dimen name="app_title_text_padding_bottom">0dp</dimen>
+    <dimen name="app_title_text_height">40dp</dimen>
+</resources>
