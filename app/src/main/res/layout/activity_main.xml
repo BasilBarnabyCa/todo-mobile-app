@@ -42,12 +42,12 @@
             android:textColor="@color/gray_text_color" />
 
         <SearchView
+            style="@style/custom_search_view"
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white" />
-
+            android:layout_marginTop="@dimen/search_view_margin_top"
+            android:background="@drawable/search_input_bg"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
