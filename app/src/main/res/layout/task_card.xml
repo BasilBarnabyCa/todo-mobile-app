@@ -4,7 +4,8 @@
     android:layout_width="@dimen/task_card_width"
     android:layout_height="@dimen/task_card_height"
     app:cardCornerRadius="@dimen/task_card_corner_radius"
-    app:cardElevation="@dimen/task_card_elevation">
+    app:cardElevation="@dimen/task_card_elevation"
+    android:layout_marginEnd="30dp">
 
     <LinearLayout
         android:id="@+id/taskCardView"
@@ -32,12 +33,12 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/taskCardDescription"
+            android:id="@+id/taskCardNotes"
             style="@style/body_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/task_card_body_text_margin_top"
-            android:text="@string/task_card_description_text"/>
+            android:text="@string/task_card_notes_text"/>
 
         <TextView
             android:id="@+id/taskCardDate"

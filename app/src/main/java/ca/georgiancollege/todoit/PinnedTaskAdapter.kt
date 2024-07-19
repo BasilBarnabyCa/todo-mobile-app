@@ -44,7 +44,7 @@ class PinnedTaskAdapter(private val dataSet: Array<Task>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.binding.taskCardCategory.text = dataSet[position].category
         viewHolder.binding.taskCardTitle.text = dataSet[position].title
-        viewHolder.binding.taskCardDescription.text = dataSet[position].description
+        viewHolder.binding.taskCardNotes.text = dataSet[position].notes
         viewHolder.binding.taskCardDate.text = dataSet[position].date
         // TODO: Set the time text
     }
