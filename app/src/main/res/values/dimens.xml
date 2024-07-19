@@ -24,4 +24,8 @@
     <dimen name="task_card_title_text_size">18sp</dimen>
     <dimen name="task_card_body_text_margin_top">20dp</dimen>
     <dimen name="task_card_title_text_margin_top">4dp</dimen>
+    <dimen name="pinned_tasks_linear_layout_height">300dp</dimen>
+
+    <!-- Task Row Item -->
+    <dimen name="task_row_item_padding_y">5dp</dimen>
 </resources>

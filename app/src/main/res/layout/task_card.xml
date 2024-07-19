@@ -16,7 +16,7 @@
         android:padding="@dimen/task_card_layout_padding">
 
         <TextView
-            android:id="@+id/taskCardCategory"
+            android:id="@+id/taskCardCategoryTextView"
             style="@style/task_card_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/taskCardTitle"
+            android:id="@+id/taskCardTitleTextView"
             style="@style/task_card_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/taskCardNotes"
+            android:id="@+id/taskCardNotesTextView"
             style="@style/body_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:text="@string/task_card_notes_text"/>
 
         <TextView
-            android:id="@+id/taskCardDate"
+            android:id="@+id/taskCardDateTextView"
             style="@style/body_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

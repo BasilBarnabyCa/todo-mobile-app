@@ -10,4 +10,14 @@
     <string name="task_card_title_text">Task Title</string>
     <string name="task_card_notes_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut…</string>
     <string name="task_card_date_and_time_text">Date and Time</string>
+
+    <!-- Upcoming Tasks -->
+    <string name="upcoming_tasks_section_header_text">Upcoming Tasks</string>
+    <string name="status_text">Status</string>
+
+    <!-- Task Row Item -->
+    <string name="category_image_view_description">Category icon</string>
+    <string name="status_image_view_description">Status icon</string>
+    <string name="task_title_text">Task Title</string>
+    <string name="task_date_time_text">July 20, 2023, 10:00 AM</string>
 </resources>

@@ -54,12 +54,13 @@
     <LinearLayout
         android:id="@+id/pinnedTasksLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="@dimen/pinned_tasks_linear_layout_height"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout">
+        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/pinnedTasksSectionHeaderTextView"
@@ -73,6 +74,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            tools:listitem="@layout/task_card"/>
+            tools:listitem="@layout/task_card" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/upcomingTasksLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pinnedTasksLinearLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/upcomingTasksSectionHeaderLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/upcomingTasksSectionHeaderTextView"
+                style="@style/section_header_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/upcoming_tasks_section_header_text" />
+
+            <TextView
+                android:id="@+id/statusTextView"
+                style="@style/task_card_category_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/status_text"
+                android:textAlignment="textEnd" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tasksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/task_row_item" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
