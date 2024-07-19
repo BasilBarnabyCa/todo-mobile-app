@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/taskRowItemLinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="@dimen/task_row_item_height"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingTop="@dimen/task_row_item_padding_y"
-    android:paddingBottom="@dimen/task_row_item_padding_y">
+    android:paddingTop="@dimen/task_row_item_layout_padding_y"
+    android:paddingBottom="@dimen/task_row_item_layout_padding_y">
 
     <ImageView
         android:id="@+id/categoryImageView"
@@ -19,10 +19,10 @@
 
     <View
         android:id="@+id/taskRowDivider"
-        android:layout_width="2dp"
+        android:layout_width="@dimen/task_row_divider_width"
         android:layout_height="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginStart="@dimen/task_row_item_margin_x"
+        android:layout_marginEnd="@dimen/task_row_item_margin_x"
         android:background="@color/light_gray" />
 
     <LinearLayout
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="@dimen/task_row_item_margin_x"
         android:contentDescription="@string/status_image_view_description"
         app:srcCompat="@drawable/ic_in_progress" />
 </LinearLayout>

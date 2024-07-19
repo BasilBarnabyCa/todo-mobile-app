@@ -27,5 +27,8 @@
     <dimen name="pinned_tasks_linear_layout_height">300dp</dimen>
 
     <!-- Task Row Item -->
-    <dimen name="task_row_item_padding_y">5dp</dimen>
+    <dimen name="task_row_item_layout_padding_y">5dp</dimen>
+    <dimen name="task_row_item_height">70dp</dimen>
+    <dimen name="task_row_divider_width">2dp</dimen>
+    <dimen name="task_row_item_margin_x">30dp</dimen>
 </resources>
