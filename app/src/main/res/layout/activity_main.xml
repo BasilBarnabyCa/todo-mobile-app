@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -12,11 +13,11 @@
     android:paddingEnd="@dimen/main_padding_x"
     tools:context=".MainActivity">
 
-
     <LinearLayout
         android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="@string/slogan_text"
             android:textAlignment="center"
-            android:textColor="@color/gray_text_color" />
+            android:textColor="@color/light_gray" />
 
         <SearchView
             style="@style/custom_search_view"
@@ -48,6 +49,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/search_view_margin_top"
             android:background="@drawable/search_input_bg"/>
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/pinnedTasksLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout">
+
+        <TextView
+            android:id="@+id/pinnedTasksSectionHeaderTextView"
+            style="@style/section_header_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pinned_tasks_section_header_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pinnedTasksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/task_card"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

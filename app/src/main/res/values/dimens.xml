@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Layout -->
     <dimen name="main_padding_y">5dp</dimen>
     <dimen name="main_padding_x">25dp</dimen>
+
+    <!-- Text -->
     <dimen name="app_title_text_size">30sp</dimen>
     <dimen name="app_title_text_padding_bottom">0dp</dimen>
     <dimen name="app_title_text_height">40dp</dimen>
+    <dimen name="section_header_text_size">20sp</dimen>
+    <dimen name="body_text_size">12sp</dimen>
+    <dimen name="text_alpha">0.7</dimen>
+
+    <!-- Search View -->
     <dimen name="search_view_margin_top">10dp</dimen>
+
+    <!-- Task Card -->
+    <dimen name="task_card_width">240dp</dimen>
+    <dimen name="task_card_height">260dp</dimen>
+    <dimen name="task_card_corner_radius">25dp</dimen>
+    <dimen name="task_card_elevation">4dp</dimen>
+    <dimen name="task_card_layout_padding">20dp</dimen>
+    <dimen name="task_card_title_text_size">18sp</dimen>
+    <dimen name="task_card_body_text_margin_top">20dp</dimen>
+    <dimen name="task_card_title_text_margin_top">4dp</dimen>
 </resources>

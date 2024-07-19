@@ -1,5 +1,15 @@
 <resources>
+    <!-- Main -->
     <string name="app_name">TodoIt</string>
     <string name="app_title_text">Todo.iT</string>
     <string name="slogan_text">Track iT, finish iT!</string>
+
+    <!-- Pinned Tasks -->
+    <string name="pinned_tasks_section_header_text">Pinned Tasks</string>
+    <string name="task_card_category_text">Category</string>
+    <string name="task_card_title_text">Task Title</string>
+    <string name="task_card_description_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut…</string>
+    <string name="task_card_date_and_time_text">Date and Time</string>
+
+
 </resources>
