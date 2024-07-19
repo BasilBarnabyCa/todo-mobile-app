@@ -1,3 +1,30 @@
 <resources>
+    <!-- Main -->
     <string name="app_name">TodoIt</string>
+    <string name="app_title_text">Todo.iT</string>
+    <string name="slogan_text">Track iT, finish iT!</string>
+
+    <!-- Pinned Tasks -->
+    <string name="pinned_tasks_section_header_text">Pinned Tasks</string>
+    <string name="task_card_category_text">Category</string>
+    <string name="task_card_title_text">Task Title</string>
+    <string name="task_card_notes_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut…</string>
+    <string name="task_card_date_and_time_text">Date and Time</string>
+
+    <!-- Upcoming Tasks -->
+    <string name="upcoming_tasks_section_header_text">Upcoming Tasks</string>
+    <string name="status_text">Status</string>
+
+    <!-- Task Row Item -->
+    <string name="category_image_view_description">Category icon</string>
+    <string name="status_image_view_description">Status icon</string>
+    <string name="task_title_text">Task Title</string>
+    <string name="task_date_time_text">July 20, 2023, 10:00 AM</string>
+
+    <!-- Menu Bar -->
+    <string name="home_icon_description">Home icon</string>
+    <string name="calendar_icon_description">Calendar icon</string>
+    <string name="list_icon_description">list icon</string>
+    <string name="user_icon_description">User profile icon</string>
+    <string name="add_icon_description">Add icon</string>
 </resources>

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_gray">#0B0B0B</color>
+    <color name="gray">#3D3D3D</color>
+    <color name="light_gray">#B9B9B9</color>
+
+    <!-- Brand -->
+    <color name="sky">#0EA5E9</color>
+    <color name="emerald">#14B8A6</color>
+    <color name="orange">#FB923C</color>
+    <color name="purple">#A855F7</color>
+    <color name="pink">#E879F9</color>
 </resources>

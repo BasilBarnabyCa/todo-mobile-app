@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/taskRowItemLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/task_row_item_height"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/task_row_item_layout_padding_y">
+
+    <ImageView
+        android:id="@+id/categoryImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:contentDescription="@string/category_image_view_description"
+        app:srcCompat="@drawable/ic_briefcase" />
+
+    <View
+        android:id="@+id/taskRowDivider"
+        android:layout_width="@dimen/task_row_divider_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/task_row_item_margin_x"
+        android:layout_marginEnd="@dimen/task_row_item_margin_x"
+        android:background="@color/light_gray" />
+
+    <LinearLayout
+        android:id="@+id/taskContentLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/taskTitleTextView"
+            style="@style/task_card_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/task_title_text" />
+
+        <TextView
+            android:id="@+id/taskDateTimeTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="@dimen/text_alpha"
+            android:text="@string/task_date_time_text" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/statusImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginStart="@dimen/task_row_item_margin_x"
+        android:contentDescription="@string/status_image_view_description"
+        app:srcCompat="@drawable/ic_in_progress" />
+</LinearLayout>
