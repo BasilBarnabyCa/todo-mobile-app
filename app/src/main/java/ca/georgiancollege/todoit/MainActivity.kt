@@ -1,6 +1,7 @@
 package ca.georgiancollege.todoit
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
@@ -19,10 +20,10 @@ class MainActivity : AppCompatActivity() {
             Task("Personal", "Grocery Shopping", "Buy groceries for the week", "2023-11-22", "08:00 AM")
         )
 
-        // Create and set the adapter for the RecyclerView
+        // Create and set the Pinned tasks adapter
         val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks)
 
-        // Set the adapter and layout manager for the RecyclerView
+        // Set the adapter and layout manager for the Pinned tasks RecyclerView
         binding.pinnedTasksRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = pinnedTaskAdapter
@@ -36,13 +37,33 @@ class MainActivity : AppCompatActivity() {
             Task("Fitness", "Morning Run", "Complete a 5km run in the park", "2023-11-23", "07:00 AM")
         )
 
-        // Create and set the adapter for the Upcoming tasks RecyclerView
+        // Create and set the adapter for the Upcoming tasks adapter
         val upcomingTaskAdapter = TaskAdapter(upcomingTasks)
 
-        // Set the adapter and layout manager for the RecyclerView
+        // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = upcomingTaskAdapter
+        }
+
+        binding.menuBar.homeButton.setOnClickListener {
+            Log.d("MenuBar", "Home button clicked")
+        }
+
+        binding.menuBar.calendarButton.setOnClickListener {
+            Log.d("MenuBar", "Calendar button clicked")
+        }
+
+        binding.menuBar.addTaskButton.setOnClickListener {
+            Log.d("MenuBar", "Add task button clicked")
+        }
+
+        binding.menuBar.listButton.setOnClickListener {
+            Log.d("MenuBar", "List button clicked")
+        }
+
+        binding.menuBar.userProfileButton.setOnClickListener {
+            Log.d("MenuBar", "User profile button clicked")
         }
     }
 }

@@ -81,9 +81,9 @@
     <LinearLayout
         android:id="@+id/upcomingTasksLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/menuBarLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pinnedTasksLinearLayout"
@@ -121,5 +121,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             tools:listitem="@layout/task_row_item" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <include
+            android:id="@+id/menuBar"
+            layout="@layout/menu_bar" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
