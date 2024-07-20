@@ -11,12 +11,15 @@
     <dimen name="app_title_text_size">30sp</dimen>
     <dimen name="app_title_text_padding_bottom">0dp</dimen>
     <dimen name="app_title_text_height">40dp</dimen>
+    <dimen name="activity_title_text_size">30sp</dimen>
+    <dimen name="activity_title_text_height">35dp</dimen>
     <dimen name="section_header_text_size">20sp</dimen>
     <dimen name="body_text_size">12sp</dimen>
     <dimen name="text_alpha">0.7</dimen>
 
     <!-- Search View -->
     <dimen name="search_view_margin_top">10dp</dimen>
+    <dimen name="search_view_margin_top_medium">15dp</dimen>
 
     <!-- Task Card -->
     <dimen name="task_card_width">240dp</dimen>
