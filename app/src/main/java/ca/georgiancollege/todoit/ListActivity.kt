@@ -48,14 +48,13 @@ class ListActivity : AppCompatActivity() {
 
         binding.menuBar.calendarButton.setOnClickListener {
             Log.d("MenuBar", "Calendar button clicked")
+
+            startActivity(Intent(this, CalendarActivity::class.java))
+            finish()
         }
 
         binding.menuBar.addTaskButton.setOnClickListener {
             Log.d("MenuBar", "Add task button clicked")
-        }
-
-        binding.menuBar.listButton.setOnClickListener {
-            Log.d("MenuBar", "List button clicked")
         }
 
         binding.menuBar.userProfileButton.setOnClickListener {
