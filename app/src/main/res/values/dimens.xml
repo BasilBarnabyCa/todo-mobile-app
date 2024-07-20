@@ -3,6 +3,9 @@
     <!-- Main Layout -->
     <dimen name="main_padding_y">5dp</dimen>
     <dimen name="main_padding_x">25dp</dimen>
+    <dimen name="header_layout_padding_bottom">25dp</dimen>
+    <dimen name="recycler_view_margin_top">8dp</dimen>
+    <dimen name="section_header_layout_margin_top">20dp</dimen>
 
     <!-- Text -->
     <dimen name="app_title_text_size">30sp</dimen>
@@ -27,8 +30,8 @@
     <dimen name="pinned_tasks_linear_layout_height">300dp</dimen>
 
     <!-- Task Row Item -->
-    <dimen name="task_row_item_layout_padding_y">20dp</dimen>
-    <dimen name="task_row_item_height">84dp</dimen>
+    <dimen name="task_row_item_layout_padding_y">10dp</dimen>
+    <dimen name="task_row_item_height">80dp</dimen>
     <dimen name="task_row_divider_width">2dp</dimen>
     <dimen name="task_row_item_margin_x">30dp</dimen>
 

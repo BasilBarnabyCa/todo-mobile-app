@@ -27,4 +27,6 @@
     <string name="list_icon_description">list icon</string>
     <string name="user_icon_description">User profile icon</string>
     <string name="add_icon_description">Add icon</string>
+    <string name="all_tasks_section_header_text">All Tasks</string>
+    <string name="list_view_title_text">List View</string>
 </resources>
