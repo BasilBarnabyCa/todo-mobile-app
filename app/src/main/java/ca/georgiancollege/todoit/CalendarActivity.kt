@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityCalendarViewBinding
 
-class CalendarActivity : AppCompatActivity() {
+class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityCalendarViewBinding
 
@@ -30,7 +29,7 @@ class CalendarActivity : AppCompatActivity() {
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
-        val taskAdapter = TaskAdapter(allTasks)
+        val taskAdapter = TaskAdapter(allTasks, this)
 
         // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
@@ -65,5 +64,11 @@ class CalendarActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTaskClick(position: Int) {
+        Log.d("TaskAdapter", "Task clicked at position: $position")
+        startActivity(Intent(this, DetailsActivity::class.java))
+        finish();
     }
 }

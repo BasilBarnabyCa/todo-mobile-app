@@ -1,6 +1,7 @@
 package ca.georgiancollege.todoit
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
@@ -10,7 +11,7 @@ import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
  *
  * @param dataSet An array of Task objects to be displayed.
  */
-class TaskAdapter(private val dataSet: Array<Task>) :
+class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTaskClickListener) :
     RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
 
     /**
@@ -18,7 +19,18 @@ class TaskAdapter(private val dataSet: Array<Task>) :
      *
      * @param binding The view binding for the task card.
      */
-    class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        init {
+            binding.root.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onTaskClick(position)
+            }
+        }
+    }
 
     /**
      * Called when the RecyclerView needs a new ViewHolder to represent an item.
@@ -47,7 +59,6 @@ class TaskAdapter(private val dataSet: Array<Task>) :
             append(" - ")
             append(dataSet[position].date)
         }
-        // TODO: Set the time text
     }
 
     /**
@@ -56,4 +67,11 @@ class TaskAdapter(private val dataSet: Array<Task>) :
      * @return The total number of items in this adapter.
      */
     override fun getItemCount() = dataSet.size
+
+    /**
+     * Interface definition for a callback to be invoked when a task is clicked.
+     */
+    public interface OnTaskClickListener {
+        fun onTaskClick(position: Int)
+    }
 }

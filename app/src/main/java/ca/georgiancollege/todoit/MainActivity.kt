@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, PinnedTaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Create and set the Pinned tasks adapter
-        val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks)
+        val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks, this)
 
         // Set the adapter and layout manager for the Pinned tasks RecyclerView
         binding.pinnedTasksRecyclerView.apply {
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
-        val upcomingTaskAdapter = TaskAdapter(upcomingTasks)
+        val upcomingTaskAdapter = TaskAdapter(upcomingTasks, this)
 
         // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
@@ -76,5 +76,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTaskClick(position: Int) {
+        Log.d("TaskAdapter", "Task clicked at position: $position")
+        startActivity(Intent(this, DetailsActivity::class.java))
+        finish();
     }
 }

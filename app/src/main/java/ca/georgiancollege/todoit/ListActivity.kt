@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityListBinding
 
-class ListActivity : AppCompatActivity() {
+class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityListBinding
 
@@ -33,7 +33,7 @@ class ListActivity : AppCompatActivity() {
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
-        val taskAdapter = TaskAdapter(allTasks)
+        val taskAdapter = TaskAdapter(allTasks, this)
 
         // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
@@ -68,5 +68,11 @@ class ListActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTaskClick(position: Int) {
+        Log.d("TaskAdapter", "Task clicked at position: $position")
+        startActivity(Intent(this, DetailsActivity::class.java))
+        finish();
     }
 }
