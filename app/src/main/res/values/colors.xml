@@ -6,6 +6,8 @@
     <color name="dark_gray">#0B0B0B</color>
     <color name="gray">#3D3D3D</color>
     <color name="light_gray">#B9B9B9</color>
+    <color name="slate">#808080</color>
+    <color name="dark_slate">#5B5B5B</color>
 
     <!-- Brand -->
     <color name="sky">#0EA5E9</color>

@@ -34,7 +34,6 @@
             android:textSize="@dimen/activity_title_text_size" />
 
         <SearchView
-            style="@style/custom_search_view"
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

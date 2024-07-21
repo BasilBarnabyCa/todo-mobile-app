@@ -43,4 +43,11 @@
     <dimen name="add_button_size">64dp</dimen>
     <dimen name="user_profile_button_size">32dp</dimen>
     <dimen name="user_profile_button_margin_end">30dp</dimen>
+
+    <!-- Form -->
+    <dimen name="label_text_margin_bottom">5dp</dimen>
+    <dimen name="input_margin_bottom">35dp</dimen>
+    <dimen name="input_padding_y">15dp</dimen>
+    <dimen name="input_height">48dp</dimen>
+    <dimen name="textarea_height">350dp</dimen>
 </resources>

@@ -11,7 +11,7 @@
     android:paddingBottom="0dp"
     android:paddingStart="@dimen/main_padding_x"
     android:paddingEnd="@dimen/main_padding_x"
-    tools:context=".MainActivity">
+    tools:context=".AddTaskActivity">
 
     <LinearLayout
         android:id="@+id/headerLinearLayout"
@@ -29,81 +29,76 @@
             android:layout_height="wrap_content"
             android:height="@dimen/activity_title_text_height"
             android:fontFamily="@font/montserrat"
-            android:text="@string/calender_title_text"
+            android:text="@string/add_task_title_text"
             android:textColor="@color/white"
             android:textSize="@dimen/activity_title_text_size" />
-
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/search_view_margin_top_medium"
-            android:background="@drawable/search_input_bg"/>
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/pinnedTasksLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/pinned_tasks_linear_layout_height"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout"
-        app:layout_constraintVertical_bias="0.0">
-
-        <CalendarView
-            android:id="@+id/calendarView"
-            style="@style/CustomCalendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/upcomingTasksLinearLayout"
+        android:id="@+id/formLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toTopOf="@id/menuBarLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pinnedTasksLinearLayout">
+        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout">
 
-        <LinearLayout
-            android:id="@+id/upcomingTasksSectionHeaderLinearLayout"
+        <EditText
+            android:id="@+id/nameEditTextView"
+            style="@style/custom_text_input"
+            android:autofillHints="@string/name_edit_text_hint"
+            android:inputType="text"
+            android:background="@drawable/input_bg"
+            android:hint="@string/name_edit_text_hint" />
+
+        <TextView
+            android:id="@+id/categoryLabelTextView"
+            style="@style/label_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/section_header_layout_margin_top"
+            android:layout_marginBottom="@dimen/label_text_margin_bottom"
+            android:text="@string/category_label_text" />
+
+        <EditText
+            android:id="@+id/categoryEditTextView"
+            style="@style/custom_text_input"
+            android:autofillHints="@string/name_edit_text_hint"
+            android:inputType="text"
+            android:background="@drawable/input_bg"
+            android:hint="@string/name_edit_text_hint"
+            android:text="@string/category_sample_text"/>
+
+        <EditText
+            android:id="@+id/notesEditTextView"
+            style="@style/custom_textarea"
+            android:autofillHints="@string/name_edit_text_hint"
+            android:background="@drawable/input_bg"
+            android:hint="@string/notes_edit_text_hint"
+            android:inputType="textMultiLine" />
+
+        <LinearLayout
+            android:id="@+id/dueDateToggleLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tasksSectionHeaderTextView"
-                style="@style/section_header_text"
+                android:id="@+id/dueDateLabelTextView"
+                style="@style/label_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/tasks_section_header_text" />
+                android:text="@string/due_date_label_text" />
 
-            <TextView
-                android:id="@+id/statusTextView"
-                style="@style/task_card_category_text"
+            <Switch
+                android:id="@+id/dueDateSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/status_text"
-                android:textAlignment="textEnd" />
+                android:text="Switch" />
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tasksRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            tools:listitem="@layout/task_row_item" />
+
     </LinearLayout>
 
     <LinearLayout

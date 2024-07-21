@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -56,6 +58,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.menuBar.addTaskButton.setOnClickListener {
             Log.d("MenuBar", "Add task button clicked")
+
+            startActivity(Intent(this, AddTaskActivity::class.java))
+            finish()
         }
 
         binding.menuBar.listButton.setOnClickListener {

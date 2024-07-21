@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityCalendarViewBinding
 
 class CalendarActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityCalendarViewBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarViewBinding.inflate(layoutInflater)
@@ -45,6 +47,9 @@ class CalendarActivity : AppCompatActivity() {
 
         binding.menuBar.addTaskButton.setOnClickListener {
             Log.d("MenuBar", "Add task button clicked")
+
+            startActivity(Intent(this, AddTaskActivity::class.java))
+            finish()
         }
 
         binding.menuBar.listButton.setOnClickListener {
