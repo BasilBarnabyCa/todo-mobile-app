@@ -45,4 +45,6 @@
     <string name="select_a_date_label_text">Please select a date</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="save_button_text">Save</string>
+    <string name="edit_task_title_text">Edit task</string>
+    <string name="status_label_text">Status</string>
 </resources>
