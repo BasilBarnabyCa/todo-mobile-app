@@ -35,6 +35,8 @@
 
     <!-- Calendar View -->
     <string name="tasks_section_header_text">Tasks</string>
+
+    <!-- Forms -->
     <string name="add_task_title_text">Add task</string>
     <string name="name_edit_text_hint">Name</string>
     <string name="category_label_text">Category</string>
@@ -47,4 +49,6 @@
     <string name="save_button_text">Save</string>
     <string name="edit_task_title_text">Edit task</string>
     <string name="status_label_text">Status</string>
+    <string name="name_sample_edit_text">Complete Assignment 4</string>
+    <string name="notes_sample_edit_text">Draft design and code for Todo app. Ensure that you follow the guidelines and submit on time.</string>
 </resources>
