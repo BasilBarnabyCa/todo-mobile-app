@@ -3,19 +3,16 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import ca.georgiancollege.todoit.databinding.ActivityUserProfileBinding
+import ca.georgiancollege.todoit.databinding.ActivityDetailsBinding
 
-class UserProfileActivity : AppCompatActivity() {
+class DetailsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUserProfileBinding
+    private lateinit var binding: ActivityDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUserProfileBinding.inflate(layoutInflater)
+        binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.menuBar.homeButton.setOnClickListener {
@@ -53,13 +50,8 @@ class UserProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.viewEditButton.setOnClickListener {
+        binding.editIconButton.setOnClickListener {
             startActivity(Intent(this, EditTaskActivity::class.java))
-            finish()
-        }
-
-        binding.viewDetailsButton.setOnClickListener {
-            startActivity(Intent(this, DetailsActivity::class.java))
             finish()
         }
 

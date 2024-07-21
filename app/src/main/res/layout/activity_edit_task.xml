@@ -11,7 +11,7 @@
     android:paddingBottom="0dp"
     android:paddingStart="@dimen/main_padding_x"
     android:paddingEnd="@dimen/main_padding_x"
-    tools:context=".AddTaskActivity">
+    tools:context=".EditTaskActivity">
 
     <LinearLayout
         android:id="@+id/headerLinearLayout"

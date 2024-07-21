@@ -56,4 +56,7 @@
     <dimen name="select_date_label_text_width">175dp</dimen>
     <dimen name="button_spacer_margin">10dp</dimen>
     <dimen name="selected_date_text_size">16dp</dimen>
+
+    <!-- Details -->
+    <dimen name="details_element_margin_y">30dp</dimen>
 </resources>

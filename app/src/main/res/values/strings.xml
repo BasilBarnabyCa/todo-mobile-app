@@ -28,7 +28,8 @@
     <string name="category_image_view_description">Category icon</string>
     <string name="status_image_view_description">Status icon</string>
     <string name="task_title_text">Task Title</string>
-    <string name="task_date_time_text">July 20, 2023, 10:00 AM</string>
+    <string name="task_date_text">July 20, 2024</string>
+    <string name="task_created_date_text">July 19, 2024</string>
 
     <!-- List View -->
     <string name="all_tasks_section_header_text">All Tasks</string>
@@ -51,6 +52,8 @@
     <string name="status_label_text">Status</string>
     <string name="name_sample_edit_text">Complete Assignment 4</string>
     <string name="notes_sample_edit_text">Draft design and code for Todo app. Ensure that you follow the guidelines and submit on time.</string>
+
+    <!-- User Profile -->
     <string name="user_profile_title_text">User Profile</string>
     <string name="student_name_label_text">Student Name</string>
     <string name="student_name_text">Basil Barnaby</string>
@@ -64,4 +67,10 @@
     <string name="actions_label_text">Actions</string>
     <string name="view_edit_activity_button_text">View Edit Activity</string>
     <string name="view_details_activity_button_text">View Details Activity</string>
+    <string name="notes_label_text">Notes</string>
+    <string name="sample_status_text">In progress</string>
+    <string name="created_label_text">Created</string>
+    <string name="sample_notes_text">Complete the design document and code implementation for the Todo app, ensuring all features are functional and meet the project requirements.</string>
+    <string name="delete_icon_description">Delete task</string>
+    <string name="edit_icon_description">Edit task</string>
 </resources>
