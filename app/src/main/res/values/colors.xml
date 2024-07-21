@@ -8,6 +8,8 @@
     <color name="light_gray">#B9B9B9</color>
     <color name="slate">#808080</color>
     <color name="dark_slate">#5B5B5B</color>
+    <color name="danger_red">#F87171</color>
+    <color name="warning_yellow">#FDE047</color>
 
     <!-- Brand -->
     <color name="sky">#0EA5E9</color>
