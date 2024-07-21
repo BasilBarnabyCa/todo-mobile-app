@@ -42,7 +42,11 @@ class TaskAdapter(private val dataSet: Array<Task>) :
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.binding.taskTitleTextView.text = dataSet[position].title
-        viewHolder.binding.taskDateTimeTextView.text = dataSet[position].notes
+        viewHolder.binding.taskDateTimeTextView.text = buildString {
+            append(dataSet[position].notes)
+            append(" - ")
+            append(dataSet[position].date)
+        }
         // TODO: Set the time text
     }
 

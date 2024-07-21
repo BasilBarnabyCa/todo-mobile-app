@@ -12,6 +12,10 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/body_text_size</item>
     </style>
+    <style name="excerpt_text" parent="app_text">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/excerpt_text_size</item>
+    </style>
 
     <!-- Task Card Style -->
     <style name="task_card_category_text" parent="app_text">
@@ -57,6 +61,20 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/body_text_size</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="custom_button" parent="ThemeOverlay.Material3.Button">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <style name="selected_date_text" parent="app_text">
+        <item name="android:textSize">@dimen/selected_date_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="spinner_dropdown_item_text" parent="app_text">
+        <item name="android:textColor">@color/dark_slate</item>
+        <item name="android:textSize">@dimen/body_text_size</item>
     </style>
 
     <!-- Custom CalendarView Style -->

@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/taskDateTimeTextView"
-            style="@style/body_text"
+            style="@style/excerpt_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/text_alpha"
