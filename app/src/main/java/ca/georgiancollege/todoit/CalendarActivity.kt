@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityCalendarViewBinding
 
-class CalendarActivity : AppCompatActivity() {
+class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityCalendarViewBinding
+    private lateinit var todayTasks: Array<Task>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,7 @@ class CalendarActivity : AppCompatActivity() {
         // TODO: Fix the calendar header text color
 
         // Sample data for Upcoming tasks
-        val allTasks = arrayOf(
+        todayTasks = arrayOf(
             Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "July 24, 2024"),
             Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "July 25, 2024"),
             Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "July 26, 2024"),
@@ -30,7 +30,7 @@ class CalendarActivity : AppCompatActivity() {
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
-        val taskAdapter = TaskAdapter(allTasks)
+        val taskAdapter = TaskAdapter(todayTasks, this)
 
         // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
@@ -65,5 +65,21 @@ class CalendarActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTaskClick(position: Int) {
+        Log.d("TaskAdapter: Today", "Task clicked at position: $position")
+
+        val task = todayTasks[position]
+
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("category", task.category)
+            putExtra("title", task.title)
+            putExtra("notes", task.notes)
+            putExtra("dueDate", task.date)
+        }
+
+        startActivity(intent)
+        finish();
     }
 }

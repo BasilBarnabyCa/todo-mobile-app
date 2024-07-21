@@ -7,9 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityListBinding
 
-class ListActivity : AppCompatActivity() {
+class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityListBinding
+    private lateinit var allTasks: Array<Task>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +18,7 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Sample data for Upcoming tasks
-        val allTasks = arrayOf(
+        allTasks = arrayOf(
             Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "July 24, 2024"),
             Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "July 25, 2024"),
             Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "July 26, 2024"),
@@ -33,7 +34,7 @@ class ListActivity : AppCompatActivity() {
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
-        val taskAdapter = TaskAdapter(allTasks)
+        val taskAdapter = TaskAdapter(allTasks, this)
 
         // Set the adapter and layout manager for the Upcoming tasks RecyclerView
         binding.tasksRecyclerView.apply {
@@ -68,5 +69,20 @@ class ListActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTaskClick(position: Int) {
+        Log.d("TaskAdapter", "Task clicked at position: $position")
+        val task = allTasks[position]
+
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("category", task.category)
+            putExtra("title", task.title)
+            putExtra("notes", task.notes)
+            putExtra("dueDate", task.date)
+        }
+
+        startActivity(intent)
+        finish();
     }
 }

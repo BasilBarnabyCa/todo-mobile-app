@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/listViewTitleTextView"
+            android:id="@+id/detailsTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:height="@dimen/activity_title_text_height"
