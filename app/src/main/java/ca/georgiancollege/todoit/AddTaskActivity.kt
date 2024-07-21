@@ -47,6 +47,9 @@ class AddTaskActivity : AppCompatActivity() {
 
         binding.menuBar.userProfileButton.setOnClickListener {
             Log.d("MenuBar", "User profile button clicked")
+
+            startActivity(Intent(this, UserProfileActivity::class.java))
+            finish()
         }
 
         binding.cancelButton.setOnClickListener {

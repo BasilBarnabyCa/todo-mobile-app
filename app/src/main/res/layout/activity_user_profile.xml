@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient_dark"
+    android:paddingTop="@dimen/main_padding_y"
+    android:paddingBottom="0dp"
+    android:paddingStart="@dimen/main_padding_x"
+    android:paddingEnd="@dimen/main_padding_x"
+    tools:context=".ListActivity">
+
+    <LinearLayout
+        android:id="@+id/headerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/header_layout_padding_bottom"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/listViewTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:height="@dimen/activity_title_text_height"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/user_profile_title_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/activity_title_text_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tasksLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/menuBarLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLinearLayout">
+
+        <TextView
+            android:id="@+id/studentNameLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink"
+            android:text="@string/student_name_label_text" />
+
+        <TextView
+            android:id="@+id/studentNameTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="@string/student_name_text" />
+
+        <TextView
+            android:id="@+id/studentNumberLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink"
+            android:text="@string/student_number_label_text" />
+
+        <TextView
+            android:id="@+id/studentNumberTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="@string/student_number_text" />
+
+        <TextView
+            android:id="@+id/appNameLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink"
+            android:text="@string/app_name_label_text" />
+
+        <TextView
+            android:id="@+id/appNameTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="@string/app_title_text" />
+
+        <TextView
+            android:id="@+id/appVersionLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink"
+            android:text="@string/version_label_text" />
+
+        <TextView
+            android:id="@+id/appVersionTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="@string/version_text" />
+
+        <TextView
+            android:id="@+id/appDescriptionLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pink"
+            android:text="@string/description_label_text" />
+
+        <TextView
+            android:id="@+id/appDescriptionTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="@string/description_text" />
+
+        <TextView
+            android:id="@+id/actionsLabelTextView"
+            style="@style/label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/actions_label_text" />
+
+        <LinearLayout
+            android:id="@+id/actionButtonsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/viewEditButton"
+                style="@style/custom_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/button_spacer_margin"
+                android:backgroundTint="@color/sky"
+                android:text="@string/view_edit_activity_button_text"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/viewDetailsButton"
+                style="@style/custom_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/sky"
+                android:text="@string/view_details_activity_button_text"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuBarLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <include
+            android:id="@+id/menuBar"
+            layout="@layout/menu_bar" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
