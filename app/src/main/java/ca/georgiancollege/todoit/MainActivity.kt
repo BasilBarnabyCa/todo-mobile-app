@@ -10,6 +10,8 @@ import ca.georgiancollege.todoit.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, PinnedTaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var upcomingTasks: Array<Task>
+    private lateinit var pinnedTasks: Array<Task>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +19,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         setContentView(binding.root)
 
         // Sample data for pinned tasks
-        val pinnedTasks = arrayOf(
+        pinnedTasks = arrayOf(
             Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "July 24, 2024"),
             Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "July 25, 2024"),
             Task("Personal", "Grocery Shopping", "Buy groceries for the week", "July 26, 2024")
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         }
 
         // Sample data for Upcoming tasks
-        val upcomingTasks = arrayOf(
+        upcomingTasks = arrayOf(
             Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "July 27, 2024"),
             Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "July 28, 2024"),
             Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "July 29, 2024"),
@@ -78,9 +80,35 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         }
     }
 
+    override fun onTaskCardClick(position: Int) {
+        Log.d("TaskAdapter", "Task card clicked at position: $position")
+
+        val task = pinnedTasks[position]
+
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("category", task.category)
+            putExtra("title", task.title)
+            putExtra("notes", task.notes)
+            putExtra("dueDate", task.date)
+        }
+
+        startActivity(intent)
+        finish();
+    }
+
     override fun onTaskClick(position: Int) {
         Log.d("TaskAdapter", "Task clicked at position: $position")
-        startActivity(Intent(this, DetailsActivity::class.java))
+
+        val task = upcomingTasks[position]
+
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("category", task.category)
+            putExtra("title", task.title)
+            putExtra("notes", task.notes)
+            putExtra("dueDate", task.date)
+        }
+
+        startActivity(intent)
         finish();
     }
 }

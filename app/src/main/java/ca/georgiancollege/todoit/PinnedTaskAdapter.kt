@@ -27,7 +27,7 @@ class PinnedTaskAdapter(private val dataSet: Array<Task>, private val listener: 
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onTaskClick(position)
+                listener.onTaskCardClick(position)
             }
         }
     }
@@ -70,6 +70,6 @@ class PinnedTaskAdapter(private val dataSet: Array<Task>, private val listener: 
      * Interface definition for a callback to be invoked when a task is clicked.
      */
     public interface OnTaskClickListener {
-        fun onTaskClick(position: Int)
+        fun onTaskCardClick(position: Int)
     }
 }

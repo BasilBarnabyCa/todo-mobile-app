@@ -15,6 +15,17 @@ class DetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Get task data from intent
+        val category = intent.getStringExtra("category")
+        val title = intent.getStringExtra("title")
+        val notes = intent.getStringExtra("notes")
+        val dueDate = intent.getStringExtra("dueDate")
+
+        // Set task data to text views
+        binding.detailsTitleTextView.text = title
+        binding.notesTextView.text = notes
+        binding.dueDateTextView.text = dueDate
+
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
 
