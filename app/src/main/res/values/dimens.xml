@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Layout -->
-    <dimen name="main_padding_y">5dp</dimen>
+    <dimen name="main_padding_y">25dp</dimen>
     <dimen name="main_padding_x">25dp</dimen>
     <dimen name="header_layout_padding_bottom">25dp</dimen>
     <dimen name="recycler_view_margin_top">8dp</dimen>
@@ -47,7 +47,12 @@
     <!-- Form -->
     <dimen name="label_text_margin_bottom">5dp</dimen>
     <dimen name="input_margin_bottom">35dp</dimen>
+    <dimen name="input_margin_bottom_sm">20dp</dimen>
     <dimen name="input_padding_y">15dp</dimen>
     <dimen name="input_height">48dp</dimen>
     <dimen name="textarea_height">350dp</dimen>
+    <dimen name="button_corner_radius">12dp</dimen>
+    <dimen name="select_date_label_text_width">175dp</dimen>
+    <dimen name="button_spacer_margin">10dp</dimen>
+    <dimen name="selected_date_text_size">16dp</dimen>
 </resources>
