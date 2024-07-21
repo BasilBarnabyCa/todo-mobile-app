@@ -51,4 +51,17 @@
     <string name="status_label_text">Status</string>
     <string name="name_sample_edit_text">Complete Assignment 4</string>
     <string name="notes_sample_edit_text">Draft design and code for Todo app. Ensure that you follow the guidelines and submit on time.</string>
+    <string name="user_profile_title_text">User Profile</string>
+    <string name="student_name_label_text">Student Name</string>
+    <string name="student_name_text">Basil Barnaby</string>
+    <string name="student_number_label_text">Student Number</string>
+    <string name="student_number_text">200540109</string>
+    <string name="app_name_label_text">App name</string>
+    <string name="version_label_text">Version</string>
+    <string name="version_text">0.1</string>
+    <string name="description_label_text">Description</string>
+    <string name="description_text">An Android application for organizing and managing tasks. Users can add, edit, delete, and categorize tasks, view upcoming and pinned tasks, * select due dates, and navigate between different activities.</string>
+    <string name="actions_label_text">Actions</string>
+    <string name="view_edit_activity_button_text">View Edit Activity</string>
+    <string name="view_details_activity_button_text">View Details Activity</string>
 </resources>
