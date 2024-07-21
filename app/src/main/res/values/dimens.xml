@@ -14,7 +14,8 @@
     <dimen name="activity_title_text_size">30sp</dimen>
     <dimen name="activity_title_text_height">35dp</dimen>
     <dimen name="section_header_text_size">20sp</dimen>
-    <dimen name="body_text_size">12sp</dimen>
+    <dimen name="body_text_size">15sp</dimen>
+    <dimen name="excerpt_text_size">12sp</dimen>
     <dimen name="text_alpha">0.7</dimen>
 
     <!-- Search View -->

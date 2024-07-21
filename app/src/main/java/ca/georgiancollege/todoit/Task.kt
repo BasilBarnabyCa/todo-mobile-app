@@ -13,6 +13,6 @@ data class Task(
     val category: String,
     val title: String,
     val notes: String,
-    val date: String,
-    val time: String
+    val date: String
+//    val time: String
 )

@@ -18,9 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         // Sample data for pinned tasks
         val pinnedTasks = arrayOf(
-            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "2023-11-20", "10:00 AM"),
-            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "2023-11-21", "09:00 AM"),
-            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "2023-11-22", "08:00 AM")
+            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "July 24, 2024"),
+            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "July 25, 2024"),
+            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "July 26, 2024")
         )
 
         // Create and set the Pinned tasks adapter
@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         // Sample data for Upcoming tasks
         val upcomingTasks = arrayOf(
-            Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "2023-11-20", "10:00 AM"),
-            Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "2023-11-21", "11:00 AM"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "2023-11-22", "02:00 PM"),
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "2023-11-23", "07:00 AM")
+            Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "July 27, 2024"),
+            Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "July 28, 2024"),
+            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "July 29, 2024"),
+            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "July 30, 2024")
         )
 
         // Create and set the adapter for the Upcoming tasks adapter

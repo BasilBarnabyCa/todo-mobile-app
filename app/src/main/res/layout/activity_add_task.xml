@@ -60,14 +60,12 @@
             android:layout_marginBottom="@dimen/label_text_margin_bottom"
             android:text="@string/category_label_text" />
 
-        <EditText
-            android:id="@+id/categoryEditTextView"
+        <Spinner
+            android:id="@+id/categorySpinner"
             style="@style/custom_text_input"
-            android:autofillHints="@string/name_edit_text_hint"
-            android:background="@drawable/input_bg"
-            android:hint="@string/name_edit_text_hint"
-            android:inputType="text"
-            android:text="@string/category_sample_text" />
+            android:layout_width="match_parent"
+            android:dropDownVerticalOffset="@dimen/input_height"
+            android:background="@drawable/input_bg" />
 
         <EditText
             android:id="@+id/notesEditTextView"
@@ -127,7 +125,6 @@
                 android:textColor="@color/white" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 
