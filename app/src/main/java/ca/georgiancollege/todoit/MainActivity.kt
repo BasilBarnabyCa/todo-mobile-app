@@ -92,7 +92,6 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         }
 
         startActivity(intent)
-        finish();
     }
 
     override fun onTaskClick(position: Int) {
@@ -110,6 +109,5 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         }
 
         startActivity(intent)
-        finish();
     }
 }

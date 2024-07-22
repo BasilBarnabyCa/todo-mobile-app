@@ -63,11 +63,11 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         }
 
         when (dataSet[position].category) {
-            "Fitness" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+            "Fitness" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
             "Work" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
             "School" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_book)
-            "Personal" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_hand_heart)
-            else -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+            "Personal" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+            else -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
         }
 
         when (dataSet[position].status) {

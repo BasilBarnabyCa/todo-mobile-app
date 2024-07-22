@@ -105,6 +105,10 @@ class DetailsActivity : AppCompatActivity() {
             Toast.makeText(this, "Status changed to Complete!", Toast.LENGTH_SHORT).show()
         }
 
+        binding.backIconButton.setOnClickListener {
+            finish()
+        }
+
         binding.editIconButton.setOnClickListener {
             startActivity(Intent(this, EditTaskActivity::class.java))
         }

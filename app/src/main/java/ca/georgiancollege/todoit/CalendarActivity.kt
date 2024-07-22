@@ -82,6 +82,5 @@ class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         }
 
         startActivity(intent)
-        finish();
     }
 }

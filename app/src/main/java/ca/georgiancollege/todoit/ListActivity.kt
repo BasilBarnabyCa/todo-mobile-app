@@ -84,6 +84,5 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         }
 
         startActivity(intent)
-        finish();
     }
 }

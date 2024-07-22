@@ -80,4 +80,5 @@
     <string name="not_started_text">Not Started</string>
     <string name="in_progress_text">In Progress</string>
     <string name="complete_text">Completed</string>
+    <string name="back_icon_description">Go back to the previous screen</string>
 </resources>
