@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for pinned tasks
         pinnedTasks = arrayOf(
-            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "Complete", "July 26, 2024", "July 10, 2024"),
+            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "Complete", "", "July 10, 2024"),
             Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "Not Started", "July 24, 2024", "July 1, 2024"),
             Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "In Progress", "July 25, 2024", "June 20, 2024")
         )
@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for Upcoming tasks
         upcomingTasks = arrayOf(
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "July 24, 2024", "July 1, 2024"),
+            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "", "July 1, 2024"),
             Task("Work", "Project Planning Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "July 26, 2024", "July 10, 2024"),
+            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "", "July 10, 2024"),
             Task("School", "Draft Research Paper", "Complete the draft for the research paper on environmental science", "Not Started", "July 27, 2024", "July 5, 2024"),
         )
 

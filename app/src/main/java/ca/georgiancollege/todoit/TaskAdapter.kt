@@ -59,10 +59,15 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.binding.taskTitleTextView.text = dataSet[position].title
-        viewHolder.binding.taskDateTimeTextView.text = buildString {
-            append(dataSet[position].notes)
-            append(" - ")
-            append(dataSet[position].dueDate)
+
+        if (dataSet[position].dueDate.isNotEmpty() && dataSet[position].dueDate != "Please select a date") {
+            viewHolder.binding.taskDateTimeTextView.text = buildString {
+                append(dataSet[position].notes)
+                append(" - ")
+                append(dataSet[position].dueDate)
+            }
+        } else {
+            viewHolder.binding.taskDateTimeTextView.text = dataSet[position].notes
         }
 
         when (dataSet[position].category) {
