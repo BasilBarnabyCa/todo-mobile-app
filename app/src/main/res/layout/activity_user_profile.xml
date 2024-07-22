@@ -125,38 +125,38 @@
             android:layout_marginBottom="@dimen/input_margin_bottom"
             android:text="@string/description_text" />
 
-        <TextView
-            android:id="@+id/actionsLabelTextView"
-            style="@style/label_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/actions_label_text" />
+<!--        <TextView-->
+<!--            android:id="@+id/actionsLabelTextView"-->
+<!--            style="@style/label_text"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/actions_label_text" />-->
 
-        <LinearLayout
-            android:id="@+id/actionButtonsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/actionButtonsLinearLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
 
-            <Button
-                android:id="@+id/viewEditButton"
-                style="@style/custom_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/button_spacer_margin"
-                android:backgroundTint="@color/sky"
-                android:text="@string/view_edit_activity_button_text"
-                android:textColor="@color/white" />
+<!--            <Button-->
+<!--                android:id="@+id/viewEditButton"-->
+<!--                style="@style/custom_button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="@dimen/button_spacer_margin"-->
+<!--                android:backgroundTint="@color/sky"-->
+<!--                android:text="@string/view_edit_activity_button_text"-->
+<!--                android:textColor="@color/white" />-->
 
-            <Button
-                android:id="@+id/viewDetailsButton"
-                style="@style/custom_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/sky"
-                android:text="@string/view_details_activity_button_text"
-                android:textColor="@color/white" />
-        </LinearLayout>
+<!--            <Button-->
+<!--                android:id="@+id/viewDetailsButton"-->
+<!--                style="@style/custom_button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:backgroundTint="@color/sky"-->
+<!--                android:text="@string/view_details_activity_button_text"-->
+<!--                android:textColor="@color/white" />-->
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 

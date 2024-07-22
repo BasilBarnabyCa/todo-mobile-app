@@ -50,15 +50,15 @@ class UserProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.viewEditButton.setOnClickListener {
-            startActivity(Intent(this, EditTaskActivity::class.java))
-            finish()
-        }
-
-        binding.viewDetailsButton.setOnClickListener {
-            startActivity(Intent(this, DetailsActivity::class.java))
-            finish()
-        }
+//        binding.viewEditButton.setOnClickListener {
+//            startActivity(Intent(this, EditTaskActivity::class.java))
+//            finish()
+//        }
+//
+//        binding.viewDetailsButton.setOnClickListener {
+//            startActivity(Intent(this, DetailsActivity::class.java))
+//            finish()
+//        }
 
     }
 }
