@@ -57,7 +57,7 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         viewHolder.binding.taskDateTimeTextView.text = buildString {
             append(dataSet[position].notes)
             append(" - ")
-            append(dataSet[position].date)
+            append(dataSet[position].dueDate)
         }
     }
 

@@ -56,7 +56,7 @@ class PinnedTaskAdapter(private val dataSet: Array<Task>, private val listener: 
         viewHolder.binding.taskCardCategoryTextView.text = dataSet[position].category
         viewHolder.binding.taskCardTitleTextView.text = dataSet[position].title
         viewHolder.binding.taskCardNotesTextView.text = dataSet[position].notes
-        viewHolder.binding.taskCardDateTextView.text = dataSet[position].date
+        viewHolder.binding.taskCardDateTextView.text = dataSet[position].dueDate
     }
 
     /**
