@@ -3,6 +3,8 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityDetailsBinding
 
@@ -66,5 +68,17 @@ class DetailsActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.deleteIconButton.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Delete task")
+                .setMessage("Are you sure you want to delete this task?")
+                .setPositiveButton("Yes") { _, _ ->
+                    Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
     }
 }
