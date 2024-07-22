@@ -14,7 +14,7 @@ data class Task(
     val category: String,
     val title: String,
     val notes: String,
-    val status: String,
+    var status: String,
     val dueDate: String,
     val createDate: String
 )
