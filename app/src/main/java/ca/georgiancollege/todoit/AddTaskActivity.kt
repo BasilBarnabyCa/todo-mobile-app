@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityAddTaskBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class AddTaskActivity : AppCompatActivity() {
@@ -54,15 +56,38 @@ class AddTaskActivity : AppCompatActivity() {
         binding.cancelButton.setOnClickListener {
             Log.d("CancelButton", "Cancel button clicked")
 
-            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
         binding.saveButton.setOnClickListener {
             Log.d("SaveButton", "Save button clicked")
 
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            val incomingDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
+            if(binding.nameEditTextView.text.toString().isEmpty() || binding.notesEditTextView.text.toString().isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()) {
+                Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT).show()
+            } else {
+                val dueDate = if (binding.selectedDateLabelTextView.text.toString() == "Please select a date") {
+                    ""
+                } else {
+                    binding.selectedDateLabelTextView.text.toString()
+                }
+                val intent = Intent(this, DetailsActivity::class.java).apply {
+                    putExtra("category", binding.categorySpinner.selectedItem.toString())
+                    putExtra("title", binding.nameEditTextView.text.toString())
+                    putExtra("notes", binding.notesEditTextView.text.toString())
+                    putExtra("status", "Not started")
+                    putExtra("dueDate",
+                        incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) })
+                    putExtra("createDate", dateFormat.format(Date()))
+                }
+
+                Toast.makeText(this, "Task added successfully!", Toast.LENGTH_SHORT).show()
+                startActivity(intent)
+                finish()
+            }
+
         }
 
         binding.selectDateButton.setOnClickListener {

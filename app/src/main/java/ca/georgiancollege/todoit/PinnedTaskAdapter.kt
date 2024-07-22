@@ -3,6 +3,7 @@ package ca.georgiancollege.todoit
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskCardBinding
 
@@ -56,7 +57,15 @@ class PinnedTaskAdapter(private val dataSet: Array<Task>, private val listener: 
         viewHolder.binding.taskCardCategoryTextView.text = dataSet[position].category
         viewHolder.binding.taskCardTitleTextView.text = dataSet[position].title
         viewHolder.binding.taskCardNotesTextView.text = dataSet[position].notes
-        viewHolder.binding.taskCardDateTextView.text = dataSet[position].date
+        viewHolder.binding.taskCardDateTextView.text = dataSet[position].dueDate
+
+        when (dataSet[position].category) {
+            "Fitness" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.emerald))
+            "Work" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.orange))
+            "School" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.purple))
+            "Personal" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.sky))
+            else -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.dark_slate))
+        }
     }
 
     /**

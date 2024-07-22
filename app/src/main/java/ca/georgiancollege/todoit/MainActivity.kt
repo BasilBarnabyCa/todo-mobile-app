@@ -20,9 +20,9 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for pinned tasks
         pinnedTasks = arrayOf(
-            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "July 24, 2024"),
-            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "July 25, 2024"),
-            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "July 26, 2024")
+            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "Complete", "July 26, 2024", "July 10, 2024"),
+            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "Not Started", "July 24, 2024", "July 1, 2024"),
+            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "In Progress", "July 25, 2024", "June 20, 2024")
         )
 
         // Create and set the Pinned tasks adapter
@@ -36,10 +36,10 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for Upcoming tasks
         upcomingTasks = arrayOf(
-            Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "July 27, 2024"),
-            Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "July 28, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "July 29, 2024"),
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "July 30, 2024")
+            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "July 24, 2024", "July 1, 2024"),
+            Task("Work", "Project Planning Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
+            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "July 26, 2024", "July 10, 2024"),
+            Task("School", "Draft Research Paper", "Complete the draft for the research paper on environmental science", "Not Started", "July 27, 2024", "July 5, 2024"),
         )
 
         // Create and set the adapter for the Upcoming tasks adapter
@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
             Log.d("MenuBar", "Add task button clicked")
 
             startActivity(Intent(this, AddTaskActivity::class.java))
-            finish()
         }
 
         binding.menuBar.listButton.setOnClickListener {
@@ -89,7 +88,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
             putExtra("category", task.category)
             putExtra("title", task.title)
             putExtra("notes", task.notes)
-            putExtra("dueDate", task.date)
+            putExtra("dueDate", task.dueDate)
         }
 
         startActivity(intent)
@@ -105,7 +104,9 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
             putExtra("category", task.category)
             putExtra("title", task.title)
             putExtra("notes", task.notes)
-            putExtra("dueDate", task.date)
+            putExtra("status", task.status)
+            putExtra("dueDate", task.dueDate)
+            putExtra("createDate", task.createDate)
         }
 
         startActivity(intent)

@@ -48,6 +48,7 @@
     <string name="select_a_date_label_text">Please select a date</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="save_button_text">Save</string>
+    <string name="update_button_text">Update</string>
     <string name="edit_task_title_text">Edit task</string>
     <string name="status_label_text">Status</string>
     <string name="name_sample_edit_text">Complete Assignment 4</string>
@@ -67,10 +68,16 @@
     <string name="actions_label_text">Actions</string>
     <string name="view_edit_activity_button_text">View Edit Activity</string>
     <string name="view_details_activity_button_text">View Details Activity</string>
+
+    <!-- Details -->
     <string name="notes_label_text">Notes</string>
     <string name="sample_status_text">In progress</string>
     <string name="created_label_text">Created</string>
     <string name="sample_notes_text">Complete the design document and code implementation for the Todo app, ensuring all features are functional and meet the project requirements.</string>
     <string name="delete_icon_description">Delete task</string>
     <string name="edit_icon_description">Edit task</string>
+    <string name="due_date_not_set_text">Not set</string>
+    <string name="not_started_text">Not Started</string>
+    <string name="in_progress_text">In Progress</string>
+    <string name="complete_text">Completed</string>
 </resources>

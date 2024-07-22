@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityEditTaskBinding
 import java.text.SimpleDateFormat
@@ -61,14 +62,13 @@ class EditTaskActivity : AppCompatActivity() {
         binding.cancelButton.setOnClickListener {
             Log.d("CancelButton", "Cancel button clicked")
 
-            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
-        binding.saveButton.setOnClickListener {
+        binding.updateButton.setOnClickListener {
             Log.d("SaveButton", "Save button clicked")
 
-            startActivity(Intent(this, MainActivity::class.java))
+            Toast.makeText(this, "Task updated successfully!", Toast.LENGTH_SHORT).show()
             finish()
         }
 

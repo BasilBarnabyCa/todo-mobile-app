@@ -171,6 +171,21 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/categoryLabelTextView"
+            style="@style/task_card_category_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/category_label_text" />
+
+        <TextView
+            android:id="@+id/categoryTextView"
+            style="@style/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/details_element_margin_y"
+            android:text="" />
+
+        <TextView
             android:id="@+id/notesLabelTextView"
             style="@style/task_card_category_text"
             android:layout_width="match_parent"

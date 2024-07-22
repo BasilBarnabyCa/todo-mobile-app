@@ -1,5 +1,7 @@
 package ca.georgiancollege.todoit
 
+import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +59,34 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         viewHolder.binding.taskDateTimeTextView.text = buildString {
             append(dataSet[position].notes)
             append(" - ")
-            append(dataSet[position].date)
+            append(dataSet[position].dueDate)
+        }
+
+        when (dataSet[position].category) {
+            "Fitness" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+            "Work" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
+            "School" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_book)
+            "Personal" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_hand_heart)
+            else -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+        }
+
+        when (dataSet[position].status) {
+            "Not Started" -> {
+                viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_not_started)
+            }
+            "In Progress" -> {
+                viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_in_progress)
+            }
+            "Complete" -> {
+                viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_complete)
+                viewHolder.binding.taskTitleTextView.paintFlags = viewHolder.binding.taskTitleTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                viewHolder.binding.taskDateTimeTextView.paintFlags = viewHolder.binding.taskDateTimeTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                viewHolder.binding.taskTitleTextView.alpha = 0.3f
+                viewHolder.binding.taskDateTimeTextView.alpha = 0.3f
+            }
+            else -> {
+                Log.e("TaskAdapter", "Invalid status: ${dataSet[position].status}")
+            }
         }
     }
 
