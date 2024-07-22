@@ -33,7 +33,6 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
             Task("Personal", "Therapy Session", "Attend the scheduled therapy session", "In Progress", "August 4, 2024", "July 7, 2024")
         )
 
-
         // Create and set the adapter for the Upcoming tasks adapter
         val taskAdapter = TaskAdapter(allTasks, this)
 
@@ -60,7 +59,7 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         binding.menuBar.addTaskButton.setOnClickListener {
             Log.d("MenuBar", "Add task button clicked")
 
-            finish()
+            startActivity(Intent(this, AddTaskActivity::class.java))
         }
 
         binding.menuBar.userProfileButton.setOnClickListener {
