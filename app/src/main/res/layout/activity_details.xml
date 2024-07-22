@@ -180,20 +180,43 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/categoryLabelTextView"
-            style="@style/task_card_category_text"
+        <LinearLayout
+            android:id="@+id/categoryContainerLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/category_label_text" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/categoryTextView"
-            style="@style/body_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/details_element_margin_y"
-            android:text="" />
+            <LinearLayout
+                android:id="@+id/categoryTextLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/categoryLabelTextView"
+                    style="@style/task_card_category_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/category_label_text" />
+
+                <TextView
+                    android:id="@+id/categoryTextView"
+                    style="@style/body_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/details_element_margin_y"
+                    android:text="" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/categoryImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/category_image_view_description"
+                app:srcCompat="@drawable/ic_briefcase" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/notesLabelTextView"

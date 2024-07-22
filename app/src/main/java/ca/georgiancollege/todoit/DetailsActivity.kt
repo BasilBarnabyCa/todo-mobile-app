@@ -28,7 +28,6 @@ class DetailsActivity : AppCompatActivity() {
         // Set task data to text views
         binding.detailsTitleTextView.text = title
         binding.notesTextView.text = notes
-        binding.categoryTextView.text = category
 
         if (dueDate.isNullOrEmpty()) {
             binding.dueDateTextView.text = getString(R.string.due_date_not_set_text)
@@ -52,6 +51,25 @@ class DetailsActivity : AppCompatActivity() {
             }
         }
         binding.statusTextView.text = status
+
+        when (category) {
+            "Fitness" -> {
+                binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
+            }
+            "School" -> {
+                binding.categoryImageView.setImageResource(R.drawable.ic_book)
+            }
+            "Work" -> {
+                binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
+            }
+            "Personal" -> {
+                binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+            }
+            else -> {
+                Log.e("DetailsActivity", "Invalid category: $category")
+            }
+        }
+        binding.categoryTextView.text = category
 
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
