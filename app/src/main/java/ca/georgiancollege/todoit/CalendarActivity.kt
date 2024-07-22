@@ -21,12 +21,13 @@ class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
         // Sample data for Upcoming tasks
         todayTasks = arrayOf(
-            Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "Not Started", "July 24, 2024", "July 1, 2024"),
-            Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "July 26, 2024", "July 10, 2024"),
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "July 27, 2024", "July 5, 2024"),
-            Task("School", "Research Paper", "Draft the introduction and literature review for the research paper", "In Progress", "July 28, 2024", "June 21, 2024"),
-            Task("Work", "Team Meeting", "Discuss project milestones and deliverables with the team", "Complete", "July 29, 2024", "June 22, 2024")
+            Task("Work", "Team Review Meeting", "Discuss project progress and address any issues", "Complete", "July 22, 2024", "June 22, 2024"),
+            Task("Personal", "Dentist Appointment", "Regular dental check-up", "Not Started", "July 22, 2024", "July 11, 2024"),
+            Task("School", "Literature Review", "Draft the literature review for the research paper", "In Progress", "July 22, 2024", "July 6, 2024"),
+            Task("Fitness", "Cycling", "Complete a 20km cycling session", "Complete", "July 22, 2024", "June 23, 2024"),
+            Task("Work", "Client Meeting", "Discuss project requirements with the client", "Not Started", "July 22, 2024", "June 24, 2024"),
+            Task("School", "Final Research Paper Submission", "Submit the final draft of the research paper", "Complete", "July 22, 2024", "July 12, 2024"),
+            Task("Personal", "Therapy Session", "Attend the scheduled therapy session", "In Progress", "July 22, 2024", "July 7, 2024")
         )
 
         // Create and set the adapter for the Upcoming tasks adapter

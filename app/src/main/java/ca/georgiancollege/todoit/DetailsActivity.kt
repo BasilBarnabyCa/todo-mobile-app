@@ -28,7 +28,6 @@ class DetailsActivity : AppCompatActivity() {
         // Set task data to text views
         binding.detailsTitleTextView.text = title
         binding.notesTextView.text = notes
-        binding.statusTextView.text = status
         binding.categoryTextView.text = category
 
         if (dueDate.isNullOrEmpty()) {
@@ -37,6 +36,22 @@ class DetailsActivity : AppCompatActivity() {
             binding.dueDateTextView.text = dueDate
         }
         binding.createdDateTextView.text = createDate
+
+        when (status) {
+            "Not Started" -> {
+                binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+            }
+            "In Progress" -> {
+                binding.statusTextView.setTextColor(getColor(R.color.sky))
+            }
+            "Complete" -> {
+                binding.statusTextView.setTextColor(getColor(R.color.emerald))
+            }
+            else -> {
+                Log.e("DetailsActivity", "Invalid status: $status")
+            }
+        }
+        binding.statusTextView.text = status
 
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -70,6 +85,24 @@ class DetailsActivity : AppCompatActivity() {
 
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
+        }
+
+        binding.notStartedIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.not_started_text)
+            binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+            Toast.makeText(this, "Status changed to Not Started!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.inProgressIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.in_progress_text)
+            binding.statusTextView.setTextColor(getColor(R.color.sky))
+            Toast.makeText(this, "Status changed to In Progress!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.completeIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.complete_text)
+            binding.statusTextView.setTextColor(getColor(R.color.emerald))
+            Toast.makeText(this, "Status changed to Complete!", Toast.LENGTH_SHORT).show()
         }
 
         binding.editIconButton.setOnClickListener {

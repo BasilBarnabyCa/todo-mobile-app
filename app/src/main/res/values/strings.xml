@@ -77,4 +77,7 @@
     <string name="delete_icon_description">Delete task</string>
     <string name="edit_icon_description">Edit task</string>
     <string name="due_date_not_set_text">Not set</string>
+    <string name="not_started_text">Not Started</string>
+    <string name="in_progress_text">In Progress</string>
+    <string name="complete_text">Completed</string>
 </resources>
