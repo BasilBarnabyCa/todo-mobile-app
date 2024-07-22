@@ -8,10 +8,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityDetailsBinding
 
+/**
+ * DetailsActivity displays task details and handles user interactions.
+ *
+ * @property binding The view binding for the details activity layout.
+ */
 class DetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
@@ -25,7 +35,7 @@ class DetailsActivity : AppCompatActivity() {
         val dueDate = intent.getStringExtra("dueDate")
         val createDate = intent.getStringExtra("createDate")
 
-        // Set task data to text views
+        // Set task data to text views with appropriate conditions
         binding.detailsTitleTextView.text = title
         binding.notesTextView.text = notes
 
@@ -71,6 +81,7 @@ class DetailsActivity : AppCompatActivity() {
         }
         binding.categoryTextView.text = category
 
+        // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
 
@@ -105,6 +116,7 @@ class DetailsActivity : AppCompatActivity() {
             finish()
         }
 
+        // Set click listeners for status buttons
         binding.notStartedIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.not_started_text)
             binding.statusTextView.setTextColor(getColor(R.color.light_gray))
@@ -123,6 +135,7 @@ class DetailsActivity : AppCompatActivity() {
             Toast.makeText(this, "Status changed to Complete!", Toast.LENGTH_SHORT).show()
         }
 
+        // Set click listeners for edit, delete, and back buttons
         binding.backIconButton.setOnClickListener {
             finish()
         }

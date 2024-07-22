@@ -14,6 +14,9 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Activity for adding new tasks with details including category, notes, due date, and creation date.
+ */
 class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddTaskBinding
@@ -25,6 +28,7 @@ class AddTaskActivity : AppCompatActivity() {
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
 
@@ -53,6 +57,7 @@ class AddTaskActivity : AppCompatActivity() {
             finish()
         }
 
+        // Set click listeners for cancel and save buttons
         binding.cancelButton.setOnClickListener {
             Log.d("CancelButton", "Cancel button clicked")
 
@@ -73,6 +78,8 @@ class AddTaskActivity : AppCompatActivity() {
                 } else {
                     binding.selectedDateLabelTextView.text.toString()
                 }
+
+                // Create an intent to pass data to DetailsActivity
                 val intent = Intent(this, DetailsActivity::class.java).apply {
                     putExtra("category", binding.categorySpinner.selectedItem.toString())
                     putExtra("title", binding.nameEditTextView.text.toString())
@@ -90,6 +97,7 @@ class AddTaskActivity : AppCompatActivity() {
 
         }
 
+        // Set click listener for select date button
         binding.selectDateButton.setOnClickListener {
             showDatePickerDialog()
         }
@@ -118,6 +126,9 @@ class AddTaskActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a date picker dialog.
+     */
     private fun showDatePickerDialog() {
         val datePickerDialog = DatePickerDialog(this, {_,year: Int, month: Int, day: Int ->
             val selectedDate = Calendar.getInstance()

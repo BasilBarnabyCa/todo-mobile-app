@@ -81,6 +81,12 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         updateStatus(viewHolder, position)
     }
 
+    /**
+     * Updates the status of the task at the given position.
+     *
+     * @param viewHolder The ViewHolder for the task card.
+     * @param position The position of the task in the data set.
+     */
     private fun updateStatus(viewHolder: ViewHolder, position: Int) {
         val task = dataSet[position]
         when (task.status) {
@@ -111,6 +117,11 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         }
     }
 
+    /**
+     * Cycles the status of the task at the given position.
+     *
+     * @param position The position of the task in the data set.
+     */
     private fun cycleStatus(position: Int) {
         val task = dataSet[position]
         task.status = when (task.status) {

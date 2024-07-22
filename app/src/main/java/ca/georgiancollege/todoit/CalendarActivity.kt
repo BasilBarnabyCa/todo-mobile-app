@@ -7,11 +7,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityCalendarViewBinding
 
+/**
+ * CalendarActivity displays tasks scheduled for today and handles user interactions.
+ *
+ * @property binding The view binding for the calendar activity layout.
+ * @property todayTasks Array of Task objects representing today's tasks.
+ */
 class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityCalendarViewBinding
     private lateinit var todayTasks: Array<Task>
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarViewBinding.inflate(layoutInflater)
@@ -67,6 +78,11 @@ class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         }
     }
 
+    /**
+     * Handles the click event for tasks.
+     *
+     * @param position The position of the clicked task in today's tasks array.
+     */
     override fun onTaskClick(position: Int) {
         Log.d("TaskAdapter: Today", "Task clicked at position: $position")
 
