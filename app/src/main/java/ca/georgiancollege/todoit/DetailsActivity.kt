@@ -21,12 +21,22 @@ class DetailsActivity : AppCompatActivity() {
         val category = intent.getStringExtra("category")
         val title = intent.getStringExtra("title")
         val notes = intent.getStringExtra("notes")
+        val status = intent.getStringExtra("status")
         val dueDate = intent.getStringExtra("dueDate")
+        val createDate = intent.getStringExtra("createDate")
 
         // Set task data to text views
         binding.detailsTitleTextView.text = title
         binding.notesTextView.text = notes
-        binding.dueDateTextView.text = dueDate
+        binding.statusTextView.text = status
+        binding.categoryTextView.text = category
+
+        if (dueDate.isNullOrEmpty()) {
+            binding.dueDateTextView.text = getString(R.string.due_date_not_set_text)
+        } else {
+            binding.dueDateTextView.text = dueDate
+        }
+        binding.createdDateTextView.text = createDate
 
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -46,7 +56,6 @@ class DetailsActivity : AppCompatActivity() {
             Log.d("MenuBar", "Add task button clicked")
 
             startActivity(Intent(this, AddTaskActivity::class.java))
-            finish()
         }
 
         binding.menuBar.listButton.setOnClickListener {
@@ -65,7 +74,6 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.editIconButton.setOnClickListener {
             startActivity(Intent(this, EditTaskActivity::class.java))
-            finish()
         }
 
         binding.deleteIconButton.setOnClickListener {
@@ -74,7 +82,7 @@ class DetailsActivity : AppCompatActivity() {
                 .setMessage("Are you sure you want to delete this task?")
                 .setPositiveButton("Yes") { _, _ ->
                     Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, ListActivity::class.java))
                     finish()
                 }
                 .setNegativeButton("No", null)

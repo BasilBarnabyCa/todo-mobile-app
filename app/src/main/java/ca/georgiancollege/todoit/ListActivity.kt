@@ -59,7 +59,6 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         binding.menuBar.addTaskButton.setOnClickListener {
             Log.d("MenuBar", "Add task button clicked")
 
-            startActivity(Intent(this, AddTaskActivity::class.java))
             finish()
         }
 

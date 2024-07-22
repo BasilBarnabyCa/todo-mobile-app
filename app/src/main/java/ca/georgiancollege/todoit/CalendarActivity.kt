@@ -49,7 +49,6 @@ class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
             Log.d("MenuBar", "Add task button clicked")
 
             startActivity(Intent(this, AddTaskActivity::class.java))
-            finish()
         }
 
         binding.menuBar.listButton.setOnClickListener {

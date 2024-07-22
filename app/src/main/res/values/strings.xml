@@ -68,10 +68,13 @@
     <string name="actions_label_text">Actions</string>
     <string name="view_edit_activity_button_text">View Edit Activity</string>
     <string name="view_details_activity_button_text">View Details Activity</string>
+
+    <!-- Details -->
     <string name="notes_label_text">Notes</string>
     <string name="sample_status_text">In progress</string>
     <string name="created_label_text">Created</string>
     <string name="sample_notes_text">Complete the design document and code implementation for the Todo app, ensuring all features are functional and meet the project requirements.</string>
     <string name="delete_icon_description">Delete task</string>
     <string name="edit_icon_description">Edit task</string>
+    <string name="due_date_not_set_text">Not set</string>
 </resources>
