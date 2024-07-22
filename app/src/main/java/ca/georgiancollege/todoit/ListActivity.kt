@@ -7,6 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityListBinding
 
+/**
+ * ListActivity displays all tasks in a RecyclerView.
+ *
+ * @property binding The view binding for the list activity layout.
+ * @property allTasks Array of Task objects representing all tasks.
+ */
 class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityListBinding
@@ -42,6 +48,7 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
             adapter = taskAdapter
         }
 
+        // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
 
@@ -70,6 +77,11 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
         }
     }
 
+    /**
+     * Handles the click event for tasks.
+     *
+     * @param position The position of the clicked task in allTasks array.
+     */
     override fun onTaskClick(position: Int) {
         Log.d("TaskAdapter", "Task clicked at position: $position")
         val task = allTasks[position]

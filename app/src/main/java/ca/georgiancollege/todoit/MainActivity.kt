@@ -1,3 +1,15 @@
+
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 3 - Todo App Prototype
+ * Date: July 22, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 0.1
+ */
+
 package ca.georgiancollege.todoit
 
 import android.content.Intent
@@ -7,6 +19,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
 
+/**
+ * MainActivity serves as the entry point of the Todo.iT application.
+ * It displays pinned and upcoming tasks, and handles navigation to other activities.
+ *
+ * @property binding The view binding for the main activity layout.
+ * @property upcomingTasks Array of Task objects representing upcoming tasks.
+ * @property pinnedTasks Array of Task objects representing pinned tasks.
+ */
 class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, PinnedTaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -79,6 +99,11 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         }
     }
 
+    /**
+     * Called when a task card is clicked in the Pinned tasks RecyclerView.
+     *
+     * @param position The position of the clicked task card in the RecyclerView.
+     */
     override fun onTaskCardClick(position: Int) {
         Log.d("TaskAdapter", "Task card clicked at position: $position")
 
@@ -94,6 +119,11 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
         startActivity(intent)
     }
 
+    /**
+     * Called when a task is clicked in the Upcoming tasks RecyclerView.
+     *
+     * @param position The position of the clicked task in the RecyclerView.
+     */
     override fun onTaskClick(position: Int) {
         Log.d("TaskAdapter", "Task clicked at position: $position")
 

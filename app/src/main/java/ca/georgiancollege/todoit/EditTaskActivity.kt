@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * Activity for editing existing tasks with details including category, notes, due date, and creation date.
+ */
 class EditTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditTaskBinding
@@ -24,6 +27,7 @@ class EditTaskActivity : AppCompatActivity() {
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
 
@@ -52,6 +56,7 @@ class EditTaskActivity : AppCompatActivity() {
             finish()
         }
 
+        // Set click listeners for cancel and update buttons
         binding.cancelButton.setOnClickListener {
             Log.d("CancelButton", "Cancel button clicked")
 
@@ -59,12 +64,13 @@ class EditTaskActivity : AppCompatActivity() {
         }
 
         binding.updateButton.setOnClickListener {
-            Log.d("SaveButton", "Save button clicked")
+            Log.d("UpdateButton", "Update button clicked")
 
             Toast.makeText(this, "Task updated successfully!", Toast.LENGTH_SHORT).show()
             finish()
         }
 
+        // Set click listener for select date button
         binding.selectDateButton.setOnClickListener {
             showDatePickerDialog()
         }
@@ -102,6 +108,9 @@ class EditTaskActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a date picker dialog.
+     */
     private fun showDatePickerDialog() {
         val datePickerDialog = DatePickerDialog(this, {_,year: Int, month: Int, day: Int ->
             val selectedDate = Calendar.getInstance()
