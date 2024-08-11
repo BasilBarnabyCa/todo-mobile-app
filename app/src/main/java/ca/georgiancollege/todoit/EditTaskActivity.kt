@@ -82,8 +82,8 @@ class EditTaskActivity : AppCompatActivity() {
             }
         }
 
-        bindMenuBarButtons()
         initializeFormElements()
+        bindMenuBarButtons()
     }
 
     private fun initializeFormElements() {

@@ -25,6 +25,7 @@ class AddTaskActivity : AppCompatActivity() {
     private var calendar = Calendar.getInstance()
     private val context = this
     private val viewModel: TaskViewModel by viewModels()
+    private var isPinned = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,19 +33,11 @@ class AddTaskActivity : AppCompatActivity() {
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var isPinned = false
+        initializeFormElements()
+        bindMenuBarButtons()
+    }
 
-        binding.pinImageView.setOnClickListener {
-            isPinned = !isPinned
-            if (isPinned) {
-                binding.pinImageView.alpha = 1.0f
-                binding.pinImageView.setImageResource(R.drawable.ic_pinned)
-            } else {
-                binding.pinImageView.alpha = context.resources.getFloat(R.dimen.dimmed_image_alpha)
-                binding.pinImageView.setImageResource(R.drawable.ic_unpinned)
-            }
-        }
-
+    private fun bindMenuBarButtons() {
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -80,47 +73,18 @@ class AddTaskActivity : AppCompatActivity() {
 
             finish()
         }
+    }
 
-        binding.saveButton.setOnClickListener {
-            Log.d("SaveButton", "Save button clicked")
-
-            val incomingDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-
-            if(binding.nameEditTextView.text.toString().isEmpty() || binding.notesEditTextView.text.toString().isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()) {
-                Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT).show()
+    private fun initializeFormElements() {
+        binding.pinImageView.setOnClickListener {
+            isPinned = !isPinned
+            if (isPinned) {
+                binding.pinImageView.alpha = 1.0f
+                binding.pinImageView.setImageResource(R.drawable.ic_pinned)
             } else {
-                val dueDate = if (binding.selectedDateLabelTextView.text.toString() == "Please select a date") {
-                    ""
-                } else {
-                    binding.selectedDateLabelTextView.text.toString()
-                }
-
-                val task = Task(
-                    id = UUID.randomUUID().toString(),
-                    category = binding.categorySpinner.selectedItem.toString(),
-                    name = binding.nameEditTextView.text.toString(),
-                    notes = binding.notesEditTextView.text.toString(),
-                    status = "Not Started",
-                    completed = false,
-                    pinned = isPinned,
-                    hasDueDate = dueDate.isNotEmpty(),
-                    dueDate = if (dueDate.isEmpty()) "" else incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) } ?: "",
-                    createDate = dateFormat.format(Date())
-                )
-
-                viewModel.saveTask(task)
-
-                Toast.makeText(this, "Task added successfully!", Toast.LENGTH_SHORT).show()
-                startActivity(intent)
-                finish()
+                binding.pinImageView.alpha = context.resources.getFloat(R.dimen.dimmed_image_alpha)
+                binding.pinImageView.setImageResource(R.drawable.ic_unpinned)
             }
-
-        }
-
-        // Set click listener for select date button
-        binding.selectDateButton.setOnClickListener {
-            showDatePickerDialog()
         }
 
         // Selection Options for spinner
@@ -145,6 +109,15 @@ class AddTaskActivity : AppCompatActivity() {
                 binding.selectedDateLabelTextView.text = context.getString(R.string.select_a_date_label_text)
             }
         }
+
+        binding.saveButton.setOnClickListener {
+            saveTask()
+        }
+
+        // Set click listener for select date button
+        binding.selectDateButton.setOnClickListener {
+            showDatePickerDialog()
+        }
     }
 
     /**
@@ -163,5 +136,41 @@ class AddTaskActivity : AppCompatActivity() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+
+    private fun saveTask() {
+        val incomingDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
+        if(binding.nameEditTextView.text.toString().isEmpty() || binding.notesEditTextView.text.toString().isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()) {
+            Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT).show()
+        } else {
+            val dueDate = if (binding.selectedDateLabelTextView.text.toString() == "Please select a date") {
+                ""
+            } else {
+                binding.selectedDateLabelTextView.text.toString()
+            }
+
+            val task = Task(
+                id = UUID.randomUUID().toString(),
+                category = binding.categorySpinner.selectedItem.toString(),
+                name = binding.nameEditTextView.text.toString(),
+                notes = binding.notesEditTextView.text.toString(),
+                status = "Not Started",
+                completed = false,
+                pinned = isPinned,
+                hasDueDate = dueDate.isNotEmpty(),
+                dueDate = if (dueDate.isEmpty()) "" else incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) } ?: "",
+                createDate = dateFormat.format(Date())
+            )
+
+            viewModel.saveTask(task)
+
+            Toast.makeText(this, "Task added successfully!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra("taskId", task.id)
+            startActivity(intent)
+            finish()
+        }
     }
 }
