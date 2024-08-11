@@ -58,7 +58,7 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.binding.taskTitleTextView.text = dataSet[position].title
+        viewHolder.binding.taskTitleTextView.text = dataSet[position].name
 
         if (dataSet[position].dueDate.isNotEmpty() && dataSet[position].dueDate != "Please select a date") {
             viewHolder.binding.taskDateTimeTextView.text = buildString {

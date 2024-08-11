@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         val intent = Intent(this, DetailsActivity::class.java).apply {
             putExtra("category", task.category)
-            putExtra("title", task.title)
+            putExtra("title", task.name)
             putExtra("notes", task.notes)
             putExtra("dueDate", task.dueDate)
         }
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         val intent = Intent(this, DetailsActivity::class.java).apply {
             putExtra("category", task.category)
-            putExtra("title", task.title)
+            putExtra("title", task.name)
             putExtra("notes", task.notes)
             putExtra("status", task.status)
             putExtra("dueDate", task.dueDate)
