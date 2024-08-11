@@ -66,13 +66,19 @@ class MainActivity : AppCompatActivity() {
         binding.tasksRecyclerView.adapter = taskAdapter
 
         // Observe the LiveData from the ViewModel
-        viewModel.tasks.observe(this) { tasks ->
+        viewModel.pinnedTasks.observe(this) { tasks ->
+            Log.d("TasksTracker", "Pinned Tasks: $tasks")
             pinnedTaskAdapter.submitList(tasks)
+        }
+
+        viewModel.upcomingTasks.observe(this) { tasks ->
+            Log.d("TasksTracker", "Upcoming Tasks: $tasks")
             taskAdapter.submitList(tasks)
         }
 
         // Load all Tasks rom the database manager via viewModel
-        viewModel.loadAllTasks()
+        viewModel.loadPinnedTasks()
+        viewModel.loadUpcomingTasks()
 
         binding.menuBar.calendarButton.setOnClickListener {
             Log.d("MenuBar", "Calendar button clicked")

@@ -81,4 +81,5 @@
     <string name="in_progress_text">In Progress</string>
     <string name="complete_text">Completed</string>
     <string name="back_icon_description">Go back to the previous screen</string>
+    <string name="pin_icon_icon_description">Pin icon</string>
 </resources>

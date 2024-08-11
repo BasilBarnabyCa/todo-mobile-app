@@ -9,6 +9,15 @@ class TaskViewModel : ViewModel() {
     private val m_tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> get() = m_tasks
 
+    private val m_pinnedTasks = MutableLiveData<List<Task>>()
+    val pinnedTasks: LiveData<List<Task>> get() = m_pinnedTasks
+
+    private val m_upcomingTasks = MutableLiveData<List<Task>>()
+    val upcomingTasks: LiveData<List<Task>> get() = m_upcomingTasks
+
+    private val m_todayTasks = MutableLiveData<List<Task>>()
+    val todayTasks: LiveData<List<Task>> get() = m_todayTasks
+
     private val m_task = MutableLiveData<Task?>()
     val task: LiveData<Task?> get() = m_task
 
@@ -16,6 +25,20 @@ class TaskViewModel : ViewModel() {
     fun loadAllTasks() {
         viewModelScope.launch {
             m_tasks.value = dataManager.getAllTasks()
+        }
+    }
+
+    // Load Pinned Tasks from the database manager
+    fun loadPinnedTasks() {
+        viewModelScope.launch {
+            m_pinnedTasks.value = dataManager.getPinnedTasks()
+        }
+    }
+
+    // Load Upcoming Tasks from the database manager
+    fun loadUpcomingTasks() {
+        viewModelScope.launch {
+            m_upcomingTasks.value = dataManager.getUpcomingTasks()
         }
     }
 

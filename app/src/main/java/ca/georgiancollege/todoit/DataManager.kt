@@ -73,22 +73,30 @@ class DataManager private constructor() {
     }
 
     // Get Upcoming Tasks from Firestore
-    suspend fun getUpcomingTasks() : List<Task> {
+    suspend fun getUpcomingTasks(): List<Task> {
         return try {
-            val tasks = db.collection("tasks").get().await()
+            val tasks = db.collection("tasks")
+                .orderBy("dueDate")
+                .limit(4)
+                .get()
+                .await()
             tasks?.toObjects(Task::class.java) ?: emptyList()
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting all Tasks: ${e.message}", e)
+            Log.e(TAG, "Error getting upcoming tasks: ${e.message}", e)
             emptyList()
         }
     }
 
-    suspend fun getPinnedTasks() : List<Task> {
+    suspend fun getPinnedTasks(): List<Task> {
         return try {
-            val tasks = db.collection("tasks").get().await()
+            val tasks = db.collection("tasks")
+                .whereEqualTo("pinned", true)
+                .limit(10)
+                .get()
+                .await()
             tasks?.toObjects(Task::class.java) ?: emptyList()
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting all Tasks: ${e.message}", e)
+            Log.e(TAG, "Error getting pinned Tasks: ${e.message}", e)
             emptyList()
         }
     }

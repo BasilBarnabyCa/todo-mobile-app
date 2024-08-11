@@ -32,6 +32,19 @@ class AddTaskActivity : AppCompatActivity() {
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var isPinned = false
+
+        binding.pinImageView.setOnClickListener {
+            isPinned = !isPinned
+            if (isPinned) {
+                binding.pinImageView.alpha = 1.0f
+                binding.pinImageView.setImageResource(R.drawable.ic_pinned)
+            } else {
+                binding.pinImageView.alpha = context.resources.getFloat(R.dimen.dimmed_image_alpha)
+                binding.pinImageView.setImageResource(R.drawable.ic_unpinned)
+            }
+        }
+
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -89,24 +102,14 @@ class AddTaskActivity : AppCompatActivity() {
                     name = binding.nameEditTextView.text.toString(),
                     notes = binding.notesEditTextView.text.toString(),
                     status = "Not Started",
-                    isComplete = false,
+                    completed = false,
+                    pinned = isPinned,
                     hasDueDate = dueDate.isNotEmpty(),
                     dueDate = if (dueDate.isEmpty()) "" else incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) } ?: "",
                     createDate = dateFormat.format(Date())
                 )
 
                 viewModel.saveTask(task)
-
-                // Create an intent to pass data to DetailsActivity
-//                val intent = Intent(this, DetailsActivity::class.java).apply {
-//                    putExtra("category", binding.categorySpinner.selectedItem.toString())
-//                    putExtra("title", binding.nameEditTextView.text.toString())
-//                    putExtra("notes", binding.notesEditTextView.text.toString())
-//                    putExtra("status", "Not started")
-//                    putExtra("dueDate",
-//                        incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) })
-//                    putExtra("createDate", dateFormat.format(Date()))
-//                }
 
                 Toast.makeText(this, "Task added successfully!", Toast.LENGTH_SHORT).show()
                 startActivity(intent)

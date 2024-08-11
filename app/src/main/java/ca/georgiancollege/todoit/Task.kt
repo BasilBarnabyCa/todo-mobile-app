@@ -22,12 +22,13 @@ data class Task(
     val name: String,
     val notes: String,
     var status: String,
-    val isComplete: Boolean,
+    val pinned: Boolean,
+    val completed: Boolean,
     val hasDueDate: Boolean,
     val dueDate: String,
     val createDate: String
 )
 {
     // No-argument constructor required by Firestore deserialization
-    constructor() : this("", "", "", "", "", false, false, "", "")
+    constructor() : this("", "", "", "", "", false, false, false, "", "")
 }
