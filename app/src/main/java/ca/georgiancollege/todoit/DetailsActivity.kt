@@ -39,7 +39,6 @@ class DetailsActivity : AppCompatActivity() {
         if (taskId != null) {
             viewModel.loadTaskById(taskId!!)
         } else {
-//            binding.deleteButton.visibility = View.GONE
             Toast.makeText(this, "Invalid task ID", Toast.LENGTH_SHORT).show()
         }
 
@@ -96,60 +95,6 @@ class DetailsActivity : AppCompatActivity() {
                 binding.categoryTextView.text = category
             }
         }
-
-        // Get task data from intent
-//        val category = intent.getStringExtra("category")
-//        val title = intent.getStringExtra("title")
-//        val notes = intent.getStringExtra("notes")
-//        val status = intent.getStringExtra("status")
-//        val dueDate = intent.getStringExtra("dueDate")
-//        val createDate = intent.getStringExtra("createDate")
-
-        // Set task data to text views with appropriate conditions
-//        binding.detailsTitleTextView.text = title
-//        binding.notesTextView.text = notes
-
-//        if (dueDate.isNullOrEmpty()) {
-//            binding.dueDateTextView.text = getString(R.string.due_date_not_set_text)
-//        } else {
-//            binding.dueDateTextView.text = dueDate
-//        }
-//        binding.createdDateTextView.text = createDate
-
-//        when (status) {
-//            "Not Started" -> {
-//                binding.statusTextView.setTextColor(getColor(R.color.light_gray))
-//            }
-//            "In Progress" -> {
-//                binding.statusTextView.setTextColor(getColor(R.color.sky))
-//            }
-//            "Complete" -> {
-//                binding.statusTextView.setTextColor(getColor(R.color.emerald))
-//            }
-//            else -> {
-//                Log.e("DetailsActivity", "Invalid status: $status")
-//            }
-//        }
-//        binding.statusTextView.text = status
-
-//        when (category) {
-//            "Fitness" -> {
-//                binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
-//            }
-//            "School" -> {
-//                binding.categoryImageView.setImageResource(R.drawable.ic_book)
-//            }
-//            "Work" -> {
-//                binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
-//            }
-//            "Personal" -> {
-//                binding.categoryImageView.setImageResource(R.drawable.ic_organic)
-//            }
-//            else -> {
-//                Log.e("DetailsActivity", "Invalid category: $category")
-//            }
-//        }
-//        binding.categoryTextView.text = category
 
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
@@ -211,7 +156,10 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         binding.editIconButton.setOnClickListener {
-            startActivity(Intent(this, EditTaskActivity::class.java))
+            val intent = Intent(this, EditTaskActivity::class.java).apply {
+                putExtra("taskId", taskId)
+            }
+            startActivity(intent)
         }
 
         binding.deleteIconButton.setOnClickListener {
