@@ -3,6 +3,7 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -103,6 +104,20 @@ class CalendarActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    val intent = Intent(this@CalendarActivity, ListActivity::class.java).apply {
+                        putExtra("searchQuery", it)
+                    }
+                    startActivity(intent)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean { return true }
+        })
     }
 
     override fun onResume() {
