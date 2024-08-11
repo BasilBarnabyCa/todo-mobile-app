@@ -32,13 +32,13 @@ class CalendarActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
 
         // Sample data for Upcoming tasks
         todayTasks = arrayOf(
-            Task("Work", "Team Review Meeting", "Discuss project progress and address any issues", "Complete", "July 22, 2024", "June 22, 2024"),
-            Task("Personal", "Dentist Appointment", "Regular dental check-up", "Not Started", "July 22, 2024", "July 11, 2024"),
-            Task("School", "Literature Review", "Draft the literature review for the research paper", "In Progress", "July 22, 2024", "July 6, 2024"),
-            Task("Fitness", "Cycling", "Complete a 20km cycling session", "Complete", "July 22, 2024", "June 23, 2024"),
-            Task("Work", "Client Meeting", "Discuss project requirements with the client", "Not Started", "July 22, 2024", "June 24, 2024"),
-            Task("School", "Final Research Paper Submission", "Submit the final draft of the research paper", "Complete", "July 22, 2024", "July 12, 2024"),
-            Task("Personal", "Therapy Session", "Attend the scheduled therapy session", "In Progress", "July 22, 2024", "July 7, 2024")
+            Task(id = "1", category = "Work", name = "Team Review Meeting", notes = "Discuss project progress and address any issues", status = "Complete", isComplete = true, hasDueDate = true, dueDate = "July 22, 2024", createDate = "June 22, 2024"),
+            Task(id = "2", category = "Personal", name = "Dentist Appointment", notes = "Regular dental check-up", status = "Not Started", isComplete = false, hasDueDate = true, dueDate = "July 22, 2024", createDate = "July 11, 2024"),
+            Task(id = "3", category = "School", name = "Literature Review", notes = "Draft the literature review for the research paper", status = "In Progress", isComplete = false, hasDueDate = true, dueDate = "July 22, 2024", createDate = "July 6, 2024"),
+            Task(id = "4", category = "Fitness", name = "Cycling", notes = "Complete a 20km cycling session", status = "Complete", isComplete = true, hasDueDate = true, dueDate = "July 22, 2024", createDate = "June 23, 2024"),
+            Task(id = "5", category = "Work", name = "Client Meeting", notes = "Discuss project requirements with the client", status = "Not Started", isComplete = false, hasDueDate = true, dueDate = "July 22, 2024", createDate = "June 24, 2024"),
+            Task(id = "6", category = "School", name = "Final Research Paper Submission", notes = "Submit the final draft of the research paper", status = "Complete", isComplete = true, hasDueDate = true, dueDate = "July 22, 2024", createDate = "July 12, 2024"),
+            Task(id = "7", category = "Personal", name = "Therapy Session", notes = "Attend the scheduled therapy session", status = "In Progress", isComplete = false, hasDueDate = true, dueDate = "July 22, 2024", createDate = "July 7, 2024")
         )
 
         // Create and set the adapter for the Upcoming tasks adapter

@@ -7,12 +7,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityAddTaskBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 /**
  * Activity for adding new tasks with details including category, notes, due date, and creation date.
@@ -22,6 +24,9 @@ class AddTaskActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddTaskBinding
     private var calendar = Calendar.getInstance()
     private val context = this
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var dataManager: DataManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,16 +84,30 @@ class AddTaskActivity : AppCompatActivity() {
                     binding.selectedDateLabelTextView.text.toString()
                 }
 
+                val task = Task(
+                    id = UUID.randomUUID().toString(),
+                    category = binding.categorySpinner.selectedItem.toString(),
+                    name = binding.nameEditTextView.text.toString(),
+                    notes = binding.notesEditTextView.text.toString(),
+                    status = "Not Started",
+                    isComplete = false,
+                    hasDueDate = dueDate.isNotEmpty(),
+                    dueDate = if (dueDate.isEmpty()) "" else incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) } ?: "",
+                    createDate = dateFormat.format(Date())
+                )
+
+                viewModel.saveTask(task)
+
                 // Create an intent to pass data to DetailsActivity
-                val intent = Intent(this, DetailsActivity::class.java).apply {
-                    putExtra("category", binding.categorySpinner.selectedItem.toString())
-                    putExtra("title", binding.nameEditTextView.text.toString())
-                    putExtra("notes", binding.notesEditTextView.text.toString())
-                    putExtra("status", "Not started")
-                    putExtra("dueDate",
-                        incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) })
-                    putExtra("createDate", dateFormat.format(Date()))
-                }
+//                val intent = Intent(this, DetailsActivity::class.java).apply {
+//                    putExtra("category", binding.categorySpinner.selectedItem.toString())
+//                    putExtra("title", binding.nameEditTextView.text.toString())
+//                    putExtra("notes", binding.notesEditTextView.text.toString())
+//                    putExtra("status", "Not started")
+//                    putExtra("dueDate",
+//                        incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) })
+//                    putExtra("createDate", dateFormat.format(Date()))
+//                }
 
                 Toast.makeText(this, "Task added successfully!", Toast.LENGTH_SHORT).show()
                 startActivity(intent)

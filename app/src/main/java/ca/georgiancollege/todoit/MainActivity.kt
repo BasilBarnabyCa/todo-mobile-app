@@ -1,4 +1,3 @@
-
 /** Author: Basil Barnaby
  * Student Number: 200540109
  * Course: COMP3025 - Mobile and Pervasive Computing
@@ -27,7 +26,8 @@ import ca.georgiancollege.todoit.databinding.ActivityMainBinding
  * @property upcomingTasks Array of Task objects representing upcoming tasks.
  * @property pinnedTasks Array of Task objects representing pinned tasks.
  */
-class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, PinnedTaskAdapter.OnTaskClickListener {
+class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener,
+    PinnedTaskAdapter.OnTaskClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var upcomingTasks: Array<Task>
@@ -40,10 +40,41 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for pinned tasks
         pinnedTasks = arrayOf(
-            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "Complete", "", "July 10, 2024"),
-            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "Not Started", "July 24, 2024", "July 1, 2024"),
-            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "In Progress", "July 25, 2024", "June 20, 2024")
+            Task(
+                id = "1",
+                category = "Personal",
+                name = "Grocery Shopping",
+                notes = "Buy groceries for the week",
+                status = "Complete",
+                isComplete = true,
+                hasDueDate = false,
+                dueDate = "",
+                createDate = "July 10, 2024"
+            ),
+            Task(
+                id = "2",
+                category = "School",
+                name = "Mobile Assignment 4",
+                notes = "Complete the design document and code for Todo app",
+                status = "Not Started",
+                isComplete = false,
+                hasDueDate = true,
+                dueDate = "July 24, 2024",
+                createDate = "July 1, 2024"
+            ),
+            Task(
+                id = "3",
+                category = "Work",
+                name = "Complete Database Backups",
+                notes = "Revise DB back up schedule and perform backups",
+                status = "In Progress",
+                isComplete = false,
+                hasDueDate = true,
+                dueDate = "July 25, 2024",
+                createDate = "June 20, 2024"
+            )
         )
+
 
         // Create and set the Pinned tasks adapter
         val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks, this)
@@ -56,11 +87,52 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, Pinne
 
         // Sample data for Upcoming tasks
         upcomingTasks = arrayOf(
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "", "July 1, 2024"),
-            Task("Work", "Project Planning Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "", "July 10, 2024"),
-            Task("School", "Draft Research Paper", "Complete the draft for the research paper on environmental science", "Not Started", "July 27, 2024", "July 5, 2024"),
+            Task(
+                id = "4",
+                category = "Fitness",
+                name = "Morning Run",
+                notes = "Complete a 5km run in the park",
+                status = "Not Started",
+                isComplete = false,
+                hasDueDate = false,
+                dueDate = "",
+                createDate = "July 1, 2024"
+            ),
+            Task(
+                id = "5",
+                category = "Work",
+                name = "Project Planning Meeting",
+                notes = "Discuss project milestones and deliverables with the team",
+                status = "In Progress",
+                isComplete = false,
+                hasDueDate = true,
+                dueDate = "July 25, 2024",
+                createDate = "June 20, 2024"
+            ),
+            Task(
+                id = "6",
+                category = "Personal",
+                name = "Doctor's Appointment",
+                notes = "Annual physical check-up with Dr. Smith",
+                status = "Complete",
+                isComplete = true,
+                hasDueDate = false,
+                dueDate = "",
+                createDate = "July 10, 2024"
+            ),
+            Task(
+                id = "7",
+                category = "School",
+                name = "Draft Research Paper",
+                notes = "Complete the draft for the research paper on environmental science",
+                status = "Not Started",
+                isComplete = false,
+                hasDueDate = true,
+                dueDate = "July 27, 2024",
+                createDate = "July 5, 2024"
+            )
         )
+
 
         // Create and set the adapter for the Upcoming tasks adapter
         val upcomingTaskAdapter = TaskAdapter(upcomingTasks, this)

@@ -17,9 +17,9 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
     RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
 
     /**
-     * ViewHolder class that holds the view binding for each task card.
+     * ViewHolder class that holds the view binding for each task row.
      *
-     * @param binding The view binding for the task card.
+     * @param binding The view binding for the task row.
      */
     inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
         init {
