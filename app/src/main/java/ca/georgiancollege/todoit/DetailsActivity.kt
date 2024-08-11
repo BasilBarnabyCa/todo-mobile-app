@@ -96,41 +96,11 @@ class DetailsActivity : AppCompatActivity() {
             }
         }
 
-        // Set click listeners for menu bar buttons
-        binding.menuBar.homeButton.setOnClickListener {
-            Log.d("MenuBar", "Home button clicked")
+        bindActionButtons()
+        bindMenuBarButtons()
+    }
 
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
-        binding.menuBar.calendarButton.setOnClickListener {
-            Log.d("MenuBar", "Calendar button clicked")
-
-            startActivity(Intent(this, CalendarActivity::class.java))
-            finish()
-        }
-
-        binding.menuBar.addTaskButton.setOnClickListener {
-            Log.d("MenuBar", "Add task button clicked")
-
-            startActivity(Intent(this, AddTaskActivity::class.java))
-        }
-
-        binding.menuBar.listButton.setOnClickListener {
-            Log.d("MenuBar", "List button clicked")
-
-            startActivity(Intent(this, ListActivity::class.java))
-            finish()
-        }
-
-        binding.menuBar.userProfileButton.setOnClickListener {
-            Log.d("MenuBar", "User profile button clicked")
-
-            startActivity(Intent(this, UserProfileActivity::class.java))
-            finish()
-        }
-
+    private fun bindActionButtons() {
         // Set click listeners for status buttons
         binding.notStartedIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.not_started_text)
@@ -167,12 +137,52 @@ class DetailsActivity : AppCompatActivity() {
                 .setTitle("Delete task")
                 .setMessage("Are you sure you want to delete this task?")
                 .setPositiveButton("Yes") { _, _ ->
-                    Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, ListActivity::class.java))
-                    finish()
+                    viewModel.task.value?.let {
+                        viewModel.deleteTask(it)
+                        Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, ListActivity::class.java))
+                        finish()
+                    }
                 }
                 .setNegativeButton("No", null)
                 .show()
+        }
+    }
+
+    private fun bindMenuBarButtons() {
+        // Set click listeners for menu bar buttons
+        binding.menuBar.homeButton.setOnClickListener {
+            Log.d("MenuBar", "Home button clicked")
+
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+        binding.menuBar.calendarButton.setOnClickListener {
+            Log.d("MenuBar", "Calendar button clicked")
+
+            startActivity(Intent(this, CalendarActivity::class.java))
+            finish()
+        }
+
+        binding.menuBar.addTaskButton.setOnClickListener {
+            Log.d("MenuBar", "Add task button clicked")
+
+            startActivity(Intent(this, AddTaskActivity::class.java))
+        }
+
+        binding.menuBar.listButton.setOnClickListener {
+            Log.d("MenuBar", "List button clicked")
+
+            startActivity(Intent(this, ListActivity::class.java))
+            finish()
+        }
+
+        binding.menuBar.userProfileButton.setOnClickListener {
+            Log.d("MenuBar", "User profile button clicked")
+
+            startActivity(Intent(this, UserProfileActivity::class.java))
+            finish()
         }
     }
 }
