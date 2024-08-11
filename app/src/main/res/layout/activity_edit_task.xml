@@ -106,7 +106,8 @@
             android:id="@+id/dueDateToggleLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/dueDateLabelTextView"
@@ -132,7 +133,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/input_margin_bottom_sm"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/selectedDateLabelTextView"
@@ -184,7 +186,8 @@
             android:layout_weight="1"
             android:backgroundTint="@color/emerald"
             android:text="@string/update_button_text"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

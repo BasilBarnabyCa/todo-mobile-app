@@ -3,6 +3,8 @@ package ca.georgiancollege.todoit
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -115,6 +117,28 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     private fun setupEventHandlers() {
+
+        // Text watcher for name edit text
+        binding.nameEditTextView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val isNameValid =
+                    (s?.length ?: 0) >= 4 // Ensure that the length is at least 4 characters
+                if (isNameValid) {
+                    binding.updateButton.visibility = View.VISIBLE
+                    binding.dueDateToggleLinearLayout.visibility = View.VISIBLE
+                    binding.selectedDateLinearLayout.visibility = View.VISIBLE
+                } else {
+                    binding.updateButton.visibility = View.GONE
+                    binding.dueDateToggleLinearLayout.visibility = View.GONE
+                    binding.selectedDateLinearLayout.visibility = View.GONE
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
         // Set click listener for select date button
         binding.selectDateButton.setOnClickListener {
             showDatePickerDialog()

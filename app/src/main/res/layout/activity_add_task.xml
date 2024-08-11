@@ -97,7 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/button_spacer_margin"
-                android:text="@string/due_date_label_text" />
+                android:text="@string/due_date_label_text"
+                android:visibility="gone"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/dueDateToggleSwitch"
@@ -106,7 +107,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:thumbTint="@color/sky" />
+                app:thumbTint="@color/sky"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -167,7 +169,8 @@
             android:layout_weight="1"
             android:backgroundTint="@color/emerald"
             android:text="@string/save_button_text"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <LinearLayout

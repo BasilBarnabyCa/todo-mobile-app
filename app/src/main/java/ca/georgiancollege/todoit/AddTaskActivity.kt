@@ -3,6 +3,8 @@ package ca.georgiancollege.todoit
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -38,6 +40,8 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     private fun initializeFormElements() {
+
+        // Handle pin icon click
         binding.pinImageView.setOnClickListener {
             isPinned = !isPinned
             if (isPinned) {
@@ -67,7 +71,8 @@ class AddTaskActivity : AppCompatActivity() {
                 binding.selectedDateLinearLayout.visibility = View.VISIBLE
             } else {
                 binding.selectedDateLinearLayout.visibility = View.GONE
-                binding.selectedDateLabelTextView.text = context.getString(R.string.select_a_date_label_text)
+                binding.selectedDateLabelTextView.text =
+                    context.getString(R.string.select_a_date_label_text)
             }
         }
 
@@ -82,6 +87,28 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     private fun setupEventHandlers() {
+
+        // Text watcher for name edit text
+        binding.nameEditTextView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val isNameValid =
+                    (s?.length ?: 0) >= 4 // Ensure that the length is at least 4 characters
+                if (isNameValid) {
+                    binding.saveButton.visibility = View.VISIBLE
+                    binding.dueDateLabelTextView.visibility = View.VISIBLE
+                    binding.dueDateToggleSwitch.visibility = View.VISIBLE
+                } else {
+                    binding.saveButton.visibility = View.GONE
+                    binding.dueDateLabelTextView.visibility = View.GONE
+                    binding.dueDateToggleSwitch.visibility = View.GONE
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -123,13 +150,14 @@ class AddTaskActivity : AppCompatActivity() {
      * Shows a date picker dialog.
      */
     private fun showDatePickerDialog() {
-        val datePickerDialog = DatePickerDialog(this, {_,year: Int, month: Int, day: Int ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, month, day)
-            val dateFormat = SimpleDateFormat("MM/dd/yyy", Locale.getDefault())
-            val formattedDate = dateFormat.format(selectedDate.time)
-            binding.selectedDateLabelTextView.text = formattedDate
-        },
+        val datePickerDialog = DatePickerDialog(
+            this, { _, year: Int, month: Int, day: Int ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(year, month, day)
+                val dateFormat = SimpleDateFormat("MM/dd/yyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedDate.time)
+                binding.selectedDateLabelTextView.text = formattedDate
+            },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
@@ -141,14 +169,19 @@ class AddTaskActivity : AppCompatActivity() {
         val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-        if(binding.nameEditTextView.text.toString().isEmpty() || binding.notesEditTextView.text.toString().isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()) {
-            Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT).show()
+        if (binding.nameEditTextView.text.toString()
+                .isEmpty() || binding.notesEditTextView.text.toString()
+                .isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()
+        ) {
+            Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT)
+                .show()
         } else {
-            val dueDate = if (binding.selectedDateLabelTextView.text.toString() == "Please select a date") {
-                ""
-            } else {
-                binding.selectedDateLabelTextView.text.toString()
-            }
+            val dueDate =
+                if (binding.selectedDateLabelTextView.text.toString() == "Please select a date") {
+                    ""
+                } else {
+                    binding.selectedDateLabelTextView.text.toString()
+                }
 
             val task = Task(
                 id = UUID.randomUUID().toString(),
@@ -159,7 +192,8 @@ class AddTaskActivity : AppCompatActivity() {
                 completed = false,
                 pinned = isPinned,
                 hasDueDate = dueDate.isNotEmpty(),
-                dueDate = if (dueDate.isEmpty()) "" else displayDateFormat.parse(dueDate)?.let { date -> storageDateFormat.format(date) } ?: "",
+                dueDate = if (dueDate.isEmpty()) "" else displayDateFormat.parse(dueDate)
+                    ?.let { date -> storageDateFormat.format(date) } ?: "",
                 createDate = storageDateFormat.format(Date()) // Store the current date in ISO format
             )
 
