@@ -23,7 +23,7 @@ data class Task(
     val notes: String,
     var status: String,
     val pinned: Boolean,
-    val completed: Boolean,
+    var completed: Boolean,
     val hasDueDate: Boolean,
     val dueDate: String,
     val createDate: String

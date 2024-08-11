@@ -21,13 +21,6 @@ class ListActivity : AppCompatActivity() {
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var dataManager: DataManager
 
-    private val adapter = TaskAdapter {task: Task ->
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("taskId", task.id)
-        }
-        startActivity(intent)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListBinding.inflate(layoutInflater)
@@ -36,6 +29,13 @@ class ListActivity : AppCompatActivity() {
         // Initialize our Firestore and DataManager
         FirebaseFirestore.setLoggingEnabled(true)
         dataManager = DataManager.instance()
+
+        val adapter = TaskAdapter ({task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }, viewModel)
 
         binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.tasksRecyclerView.adapter = adapter

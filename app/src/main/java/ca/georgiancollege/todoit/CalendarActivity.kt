@@ -25,14 +25,6 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var dataManager: DataManager
     private var formattedDate: String = ""
 
-    // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
-    private val adapter = TaskAdapter {task: Task ->
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("taskId", task.id)
-        }
-        startActivity(intent)
-    }
-
     /**
      * Called when the activity is first created.
      *
@@ -46,6 +38,14 @@ class CalendarActivity : AppCompatActivity() {
         // Initialize our Firestore and DataManager
         FirebaseFirestore.setLoggingEnabled(true)
         dataManager = DataManager.instance()
+
+        // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
+        val adapter = TaskAdapter ({task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }, viewModel)
 
         binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.tasksRecyclerView.adapter = adapter

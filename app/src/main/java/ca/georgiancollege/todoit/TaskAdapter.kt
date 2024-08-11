@@ -13,7 +13,7 @@ import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
  *
  * @param listener A lambda function that handles task click events.
  */
-class TaskAdapter(private val listener: (Task) -> Unit) :
+class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: TaskViewModel) :
     ListAdapter<Task, TaskAdapter.ViewHolder>(TaskComparator()) {
 
     /**
@@ -104,6 +104,10 @@ class TaskAdapter(private val listener: (Task) -> Unit) :
             "Complete" -> "Not Started"
             else -> "Not Started"
         }
+
+        task.completed = task.status == "Complete"
+
         notifyItemChanged(position)
+        viewModel.saveTask(task)
     }
 }

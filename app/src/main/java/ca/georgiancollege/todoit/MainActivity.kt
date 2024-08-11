@@ -34,21 +34,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var dataManager: DataManager
 
-    // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
-    private val taskAdapter = TaskAdapter {task: Task ->
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("taskId", task.id)
-        }
-        startActivity(intent)
-    }
-
-    private val pinnedTaskAdapter = PinnedTaskAdapter {task: Task ->
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("taskId", task.id)
-        }
-        startActivity(intent)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("TasksTracker", "Oncreate Called")
         super.onCreate(savedInstanceState)
@@ -58,6 +43,21 @@ class MainActivity : AppCompatActivity() {
         // Initialize our Firestore and DataManager
         FirebaseFirestore.setLoggingEnabled(true)
         dataManager = DataManager.instance()
+
+        // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
+        val taskAdapter = TaskAdapter ({task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }, viewModel)
+
+        val pinnedTaskAdapter = PinnedTaskAdapter {task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }
 
         binding.pinnedTasksRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.pinnedTasksRecyclerView.adapter = pinnedTaskAdapter
