@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class ListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListBinding
-//    private lateinit var allTasks: Array<Task>
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var dataManager: DataManager
 

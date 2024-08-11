@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityCalendarViewBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * CalendarActivity displays tasks scheduled for today and handles user interactions.
@@ -18,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class CalendarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCalendarViewBinding
-//    private lateinit var todayTasks: Array<Task>
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var dataManager: DataManager
 
@@ -48,12 +50,28 @@ class CalendarActivity : AppCompatActivity() {
         binding.tasksRecyclerView.adapter = adapter
 
         // Observe the LiveData from the ViewModel
-        viewModel.tasks.observe(this) { tasks ->
+        viewModel.tasksByDueDate.observe(this) { tasks ->
             adapter.submitList(tasks)
         }
 
+        // Get the current date and load tasks for it
+        val currentDate = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val formattedCurrentDate = dateFormat.format(currentDate)
+
         // Load all Tasks rom the database manager via viewModel
-        viewModel.loadAllTasks()
+        viewModel.loadTasksByDueDate(formattedCurrentDate)
+
+        // Set an OnDateChangeListener on the CalendarView
+        binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val selectedDate = Calendar.getInstance().apply {
+                set(year, month, dayOfMonth)
+            }.time
+            val formattedDate = dateFormat.format(selectedDate)
+
+            // Load tasks for the selected date
+            viewModel.loadTasksByDueDate(formattedDate)
+        }
 
         // TODO: Fix the calendar header text color
 

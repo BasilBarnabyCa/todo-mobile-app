@@ -101,6 +101,20 @@ class DataManager private constructor() {
         }
     }
 
+    suspend fun getTasksByDueDate(dueDate: String): List<Task> {
+        return try {
+            val tasks = db.collection("tasks")
+                .whereEqualTo("dueDate", dueDate)
+                .get()
+                .await()
+            tasks?.toObjects(Task::class.java) ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting tasks for due date $dueDate: ${e.message}", e)
+            emptyList()
+        }
+    }
+
+
     // Get Task by ID from Firestore
     suspend fun getTaskById(id: String) : Task? {
         return try {

@@ -15,8 +15,8 @@ class TaskViewModel : ViewModel() {
     private val m_upcomingTasks = MutableLiveData<List<Task>>()
     val upcomingTasks: LiveData<List<Task>> get() = m_upcomingTasks
 
-    private val m_todayTasks = MutableLiveData<List<Task>>()
-    val todayTasks: LiveData<List<Task>> get() = m_todayTasks
+    private val m_taskByDueDate = MutableLiveData<List<Task>>()
+    val tasksByDueDate: LiveData<List<Task>> get() = m_taskByDueDate
 
     private val m_task = MutableLiveData<Task?>()
     val task: LiveData<Task?> get() = m_task
@@ -39,6 +39,13 @@ class TaskViewModel : ViewModel() {
     fun loadUpcomingTasks() {
         viewModelScope.launch {
             m_upcomingTasks.value = dataManager.getUpcomingTasks()
+        }
+    }
+
+    // Load Today Tasks from the database manager
+    fun loadTasksByDueDate(dueDate: String) {
+        viewModelScope.launch {
+            m_taskByDueDate.value = dataManager.getTasksByDueDate(dueDate)
         }
     }
 
