@@ -3,74 +3,59 @@ package ca.georgiancollege.todoit
 import android.graphics.Paint
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
 
 /**
- * A control class and wrapper for displaying pinned tasks in a RecyclerView.
+ * A control class and wrapper for displaying tasks in a RecyclerView.
  *
- * @param dataSet An array of Task objects to be displayed.
+ * @param listener A lambda function that handles task click events.
  */
-class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTaskClickListener) :
-    RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+class TaskAdapter(private val listener: (Task) -> Unit) :
+    ListAdapter<Task, TaskAdapter.ViewHolder>(TaskComparator()) {
 
     /**
      * ViewHolder class that holds the view binding for each task row.
      *
      * @param binding The view binding for the task row.
      */
-    inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener(this)
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener(getItem(position)) // Pass the clicked Task to the lambda
+                }
+            }
             binding.statusImageView.setOnClickListener {
                 cycleStatus(adapterPosition)
             }
         }
-
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onTaskClick(position)
-            }
-        }
     }
 
-    /**
-     * Called when the RecyclerView needs a new ViewHolder to represent an item.
-     *
-     * @param viewGroup The parent view that the new view will be attached to.
-     * @param viewType The view type of the new view.
-     * @return A new ViewHolder that holds a view of the given view type.
-     */
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Inflate the layout with view binding
         val binding =
             TaskRowItemBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return ViewHolder(binding)
     }
 
-    /**
-     * Called by RecyclerView to display the data at the specified position.
-     *
-     * @param viewHolder The ViewHolder which should be updated to represent the contents of the item at the given position.
-     * @param position The position of the item within the adapter's data set.
-     */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.binding.taskTitleTextView.text = dataSet[position].name
+        val task = getItem(position)
+        viewHolder.binding.taskTitleTextView.text = task.name
 
-        if (dataSet[position].dueDate.isNotEmpty() && dataSet[position].dueDate != "Please select a date") {
+        if (task.dueDate.isNotEmpty() && task.dueDate != "Please select a date") {
             viewHolder.binding.taskDateTimeTextView.text = buildString {
-                append(dataSet[position].notes)
+                append(task.notes)
                 append(" - ")
-                append(dataSet[position].dueDate)
+                append(task.dueDate)
             }
         } else {
-            viewHolder.binding.taskDateTimeTextView.text = dataSet[position].notes
+            viewHolder.binding.taskDateTimeTextView.text = task.notes
         }
 
-        when (dataSet[position].category) {
+        when (task.category) {
             "Fitness" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
             "Work" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
             "School" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_book)
@@ -81,14 +66,8 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         updateStatus(viewHolder, position)
     }
 
-    /**
-     * Updates the status of the task at the given position.
-     *
-     * @param viewHolder The ViewHolder for the task card.
-     * @param position The position of the task in the data set.
-     */
     private fun updateStatus(viewHolder: ViewHolder, position: Int) {
-        val task = dataSet[position]
+        val task = getItem(position)
         when (task.status) {
             "Not Started" -> {
                 viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_not_started)
@@ -117,13 +96,8 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
         }
     }
 
-    /**
-     * Cycles the status of the task at the given position.
-     *
-     * @param position The position of the task in the data set.
-     */
     private fun cycleStatus(position: Int) {
-        val task = dataSet[position]
+        val task = getItem(position)
         task.status = when (task.status) {
             "Not Started" -> "In Progress"
             "In Progress" -> "Complete"
@@ -131,19 +105,5 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
             else -> "Not Started"
         }
         notifyItemChanged(position)
-    }
-
-    /**
-     * Returns the total number of items in the data set held by the adapter.
-     *
-     * @return The total number of items in this adapter.
-     */
-    override fun getItemCount() = dataSet.size
-
-    /**
-     * Interface definition for a callback to be invoked when a task is clicked.
-     */
-    public interface OnTaskClickListener {
-        fun onTaskClick(position: Int)
     }
 }

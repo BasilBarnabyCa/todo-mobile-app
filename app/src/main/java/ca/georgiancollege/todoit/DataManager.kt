@@ -72,6 +72,27 @@ class DataManager private constructor() {
         }
     }
 
+    // Get Upcoming Tasks from Firestore
+    suspend fun getUpcomingTasks() : List<Task> {
+        return try {
+            val tasks = db.collection("tasks").get().await()
+            tasks?.toObjects(Task::class.java) ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting all Tasks: ${e.message}", e)
+            emptyList()
+        }
+    }
+
+    suspend fun getPinnedTasks() : List<Task> {
+        return try {
+            val tasks = db.collection("tasks").get().await()
+            tasks?.toObjects(Task::class.java) ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting all Tasks: ${e.message}", e)
+            emptyList()
+        }
+    }
+
     // Get Task by ID from Firestore
     suspend fun getTaskById(id: String) : Task? {
         return try {

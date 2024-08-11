@@ -25,7 +25,6 @@ class AddTaskActivity : AppCompatActivity() {
     private var calendar = Calendar.getInstance()
     private val context = this
     private val viewModel: TaskViewModel by viewModels()
-    private lateinit var dataManager: DataManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

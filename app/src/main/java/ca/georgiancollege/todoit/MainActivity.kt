@@ -14,9 +14,11 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 /**
  * MainActivity serves as the entry point of the Todo.iT application.
@@ -26,122 +28,51 @@ import ca.georgiancollege.todoit.databinding.ActivityMainBinding
  * @property upcomingTasks Array of Task objects representing upcoming tasks.
  * @property pinnedTasks Array of Task objects representing pinned tasks.
  */
-class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener,
-    PinnedTaskAdapter.OnTaskClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var upcomingTasks: Array<Task>
-    private lateinit var pinnedTasks: Array<Task>
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var dataManager: DataManager
+
+    // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
+    private val taskAdapter = TaskAdapter {task: Task ->
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("taskId", task.id)
+        }
+        startActivity(intent)
+    }
+
+    private val pinnedTaskAdapter = PinnedTaskAdapter {task: Task ->
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra("taskId", task.id)
+        }
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("TasksTracker", "Oncreate Called")
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Sample data for pinned tasks
-        pinnedTasks = arrayOf(
-            Task(
-                id = "1",
-                category = "Personal",
-                name = "Grocery Shopping",
-                notes = "Buy groceries for the week",
-                status = "Complete",
-                isComplete = true,
-                hasDueDate = false,
-                dueDate = "",
-                createDate = "July 10, 2024"
-            ),
-            Task(
-                id = "2",
-                category = "School",
-                name = "Mobile Assignment 4",
-                notes = "Complete the design document and code for Todo app",
-                status = "Not Started",
-                isComplete = false,
-                hasDueDate = true,
-                dueDate = "July 24, 2024",
-                createDate = "July 1, 2024"
-            ),
-            Task(
-                id = "3",
-                category = "Work",
-                name = "Complete Database Backups",
-                notes = "Revise DB back up schedule and perform backups",
-                status = "In Progress",
-                isComplete = false,
-                hasDueDate = true,
-                dueDate = "July 25, 2024",
-                createDate = "June 20, 2024"
-            )
-        )
+        // Initialize our Firestore and DataManager
+        FirebaseFirestore.setLoggingEnabled(true)
+        dataManager = DataManager.instance()
 
+        binding.pinnedTasksRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.pinnedTasksRecyclerView.adapter = pinnedTaskAdapter
 
-        // Create and set the Pinned tasks adapter
-        val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks, this)
+        binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.tasksRecyclerView.adapter = taskAdapter
 
-        // Set the adapter and layout manager for the Pinned tasks RecyclerView
-        binding.pinnedTasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = pinnedTaskAdapter
+        // Observe the LiveData from the ViewModel
+        viewModel.tasks.observe(this) { tasks ->
+            pinnedTaskAdapter.submitList(tasks)
+            taskAdapter.submitList(tasks)
         }
 
-        // Sample data for Upcoming tasks
-        upcomingTasks = arrayOf(
-            Task(
-                id = "4",
-                category = "Fitness",
-                name = "Morning Run",
-                notes = "Complete a 5km run in the park",
-                status = "Not Started",
-                isComplete = false,
-                hasDueDate = false,
-                dueDate = "",
-                createDate = "July 1, 2024"
-            ),
-            Task(
-                id = "5",
-                category = "Work",
-                name = "Project Planning Meeting",
-                notes = "Discuss project milestones and deliverables with the team",
-                status = "In Progress",
-                isComplete = false,
-                hasDueDate = true,
-                dueDate = "July 25, 2024",
-                createDate = "June 20, 2024"
-            ),
-            Task(
-                id = "6",
-                category = "Personal",
-                name = "Doctor's Appointment",
-                notes = "Annual physical check-up with Dr. Smith",
-                status = "Complete",
-                isComplete = true,
-                hasDueDate = false,
-                dueDate = "",
-                createDate = "July 10, 2024"
-            ),
-            Task(
-                id = "7",
-                category = "School",
-                name = "Draft Research Paper",
-                notes = "Complete the draft for the research paper on environmental science",
-                status = "Not Started",
-                isComplete = false,
-                hasDueDate = true,
-                dueDate = "July 27, 2024",
-                createDate = "July 5, 2024"
-            )
-        )
-
-
-        // Create and set the adapter for the Upcoming tasks adapter
-        val upcomingTaskAdapter = TaskAdapter(upcomingTasks, this)
-
-        // Set the adapter and layout manager for the Upcoming tasks RecyclerView
-        binding.tasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = upcomingTaskAdapter
-        }
+        // Load all Tasks rom the database manager via viewModel
+        viewModel.loadAllTasks()
 
         binding.menuBar.calendarButton.setOnClickListener {
             Log.d("MenuBar", "Calendar button clicked")
@@ -169,47 +100,5 @@ class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener,
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-    }
-
-    /**
-     * Called when a task card is clicked in the Pinned tasks RecyclerView.
-     *
-     * @param position The position of the clicked task card in the RecyclerView.
-     */
-    override fun onTaskCardClick(position: Int) {
-        Log.d("TaskAdapter", "Task card clicked at position: $position")
-
-        val task = pinnedTasks[position]
-
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("category", task.category)
-            putExtra("title", task.name)
-            putExtra("notes", task.notes)
-            putExtra("dueDate", task.dueDate)
-        }
-
-        startActivity(intent)
-    }
-
-    /**
-     * Called when a task is clicked in the Upcoming tasks RecyclerView.
-     *
-     * @param position The position of the clicked task in the RecyclerView.
-     */
-    override fun onTaskClick(position: Int) {
-        Log.d("TaskAdapter", "Task clicked at position: $position")
-
-        val task = upcomingTasks[position]
-
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("category", task.category)
-            putExtra("title", task.name)
-            putExtra("notes", task.notes)
-            putExtra("status", task.status)
-            putExtra("dueDate", task.dueDate)
-            putExtra("createDate", task.createDate)
-        }
-
-        startActivity(intent)
     }
 }
