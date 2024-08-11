@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "952535015817",
+    "project_id": "todoit-9b0af",
+    "storage_bucket": "todoit-9b0af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952535015817:android:f54c4d32281947bd4d8158",
+        "android_client_info": {
+          "package_name": "ca.georgiancollege.todoit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzhMKo76DmNfwIRI9cmpg4CShVPvQAAbY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

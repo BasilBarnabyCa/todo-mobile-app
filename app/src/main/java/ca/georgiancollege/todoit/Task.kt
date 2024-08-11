@@ -1,5 +1,8 @@
 package ca.georgiancollege.todoit
 
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.IgnoreExtraProperties
+
 /**
  * Data class representing a task.
  *
@@ -10,7 +13,9 @@ package ca.georgiancollege.todoit
  * @property dueDate The date when the task is due or scheduled.
  * @property createDate The date when the task was created.
  */
+@IgnoreExtraProperties
 data class Task(
+    @DocumentId val id: String = "",
     val category: String,
     val title: String,
     val notes: String,
@@ -18,3 +23,7 @@ data class Task(
     val dueDate: String,
     val createDate: String
 )
+{
+    // No-argument constructor required by Firestore deserialization
+    constructor() : this("", "", "", "", "", "", "")
+}
