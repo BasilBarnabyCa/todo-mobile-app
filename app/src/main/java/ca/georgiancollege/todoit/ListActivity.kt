@@ -3,6 +3,7 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,13 +41,19 @@ class ListActivity : AppCompatActivity() {
         binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.tasksRecyclerView.adapter = adapter
 
+        // Get the search query from the intent
+        val searchQuery = intent.getStringExtra("searchQuery")
+        if (searchQuery != null) {
+            viewModel.searchTasks(searchQuery)
+        } else {
+            viewModel.loadAllTasks()
+        }
+
         // Observe the LiveData from the ViewModel
         viewModel.tasks.observe(this) { tasks ->
             adapter.submitList(tasks)
         }
 
-        // Load all Tasks rom the database manager via viewModel
-        viewModel.loadAllTasks()
 
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
@@ -75,10 +82,35 @@ class ListActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+
+        // Set up the SearchView
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.searchTasks(it)
+                }
+                return true
+            }
+
+            // Handle live changes in the search query
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    if (it.isEmpty()) {
+                        viewModel.loadAllTasks()
+                    } else {
+                        viewModel.searchTasks(it)
+                    }
+                }
+                return true
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadAllTasks()
+        val searchQuery = intent.getStringExtra("searchQuery")
+        if (searchQuery == null) {
+            viewModel.loadAllTasks()
+        }
     }
 }

@@ -56,6 +56,17 @@ class TaskViewModel : ViewModel() {
         }
     }
 
+    // Search for Tasks based on a query
+    fun searchTasks(query: String) {
+        viewModelScope.launch {
+            val allTasks = dataManager.getAllTasks()
+            val filteredTasks = allTasks.filter {
+                it.name.contains(query, ignoreCase = true) || it.notes.contains(query, ignoreCase = true)
+            }
+            m_tasks.value = filteredTasks
+        }
+    }
+
     // Save or update a Task in the database manager
     fun saveTask(task: Task) {
         viewModelScope.launch {
