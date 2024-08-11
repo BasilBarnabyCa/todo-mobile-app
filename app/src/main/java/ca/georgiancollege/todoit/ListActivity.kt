@@ -76,4 +76,9 @@ class ListActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadAllTasks()
+    }
 }

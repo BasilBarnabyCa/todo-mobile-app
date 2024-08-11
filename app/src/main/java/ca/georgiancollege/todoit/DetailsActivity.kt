@@ -140,7 +140,6 @@ class DetailsActivity : AppCompatActivity() {
                     viewModel.task.value?.let {
                         viewModel.deleteTask(it)
                         Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, ListActivity::class.java))
                         finish()
                     }
                 }

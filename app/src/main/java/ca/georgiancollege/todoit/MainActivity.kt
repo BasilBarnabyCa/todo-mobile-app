@@ -107,4 +107,10 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPinnedTasks()
+        viewModel.loadUpcomingTasks()
+    }
 }

@@ -23,6 +23,7 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalendarViewBinding
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var dataManager: DataManager
+    private var formattedDate: String = ""
 
     // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
     private val adapter = TaskAdapter {task: Task ->
@@ -57,17 +58,17 @@ class CalendarActivity : AppCompatActivity() {
         // Get the current date and load tasks for it
         val currentDate = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-        val formattedCurrentDate = dateFormat.format(currentDate)
+        formattedDate = dateFormat.format(currentDate)
 
         // Load all Tasks rom the database manager via viewModel
-        viewModel.loadTasksByDueDate(formattedCurrentDate)
+        viewModel.loadTasksByDueDate(formattedDate)
 
         // Set an OnDateChangeListener on the CalendarView
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = Calendar.getInstance().apply {
                 set(year, month, dayOfMonth)
             }.time
-            val formattedDate = dateFormat.format(selectedDate)
+            formattedDate = dateFormat.format(selectedDate)
 
             // Load tasks for the selected date
             viewModel.loadTasksByDueDate(formattedDate)
@@ -102,5 +103,10 @@ class CalendarActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadTasksByDueDate(formattedDate)
     }
 }
