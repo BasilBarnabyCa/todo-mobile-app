@@ -24,7 +24,6 @@ class EditTaskActivity : AppCompatActivity() {
     private lateinit var dataManager: DataManager
     private var taskId: String? = null
     private var isPinned: Boolean = false
-    private var currentTask: Task? = null
     private var createDate: String = ""
     private var calendar = Calendar.getInstance()
 
@@ -55,12 +54,10 @@ class EditTaskActivity : AppCompatActivity() {
                     binding.selectedDateLabelTextView.text =
                         getString(R.string.due_date_not_set_text)
                 } else {
-                    val inputFormat = SimpleDateFormat(
-                        "MM/dd/yyyy",
-                        Locale.getDefault()
-                    )
+                    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
                     val parsedDate = inputFormat.parse(task.dueDate)
-                    val formattedDate = parsedDate?.let { inputFormat.format(it) } ?: ""
+                    val formattedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
                     binding.selectedDateLabelTextView.text = formattedDate
                 }
 
@@ -83,15 +80,10 @@ class EditTaskActivity : AppCompatActivity() {
         }
 
         initializeFormElements()
-        bindMenuBarButtons()
+        setupEventHandlers()
     }
 
     private fun initializeFormElements() {
-        // Set click listener for select date button
-        binding.selectDateButton.setOnClickListener {
-            showDatePickerDialog()
-        }
-
         // Handle pin icon click
         binding.pinImageView.setOnClickListener {
             isPinned = !isPinned
@@ -109,7 +101,7 @@ class EditTaskActivity : AppCompatActivity() {
         binding.categorySpinner.adapter = categoryAdapter
 
         // Selection options for status spinner
-        val statusOptions = arrayOf("Not complete", "In progress", "Complete")
+        val statusOptions = arrayOf("Not started", "In progress", "Complete")
 
         // Create an ArrayAdapter using the custom spinner item layout and dropdown layout
         val statusAdapter = ArrayAdapter(this, R.layout.spinner_item, statusOptions)
@@ -118,9 +110,17 @@ class EditTaskActivity : AppCompatActivity() {
         // Apply the adapter to the spinner
         binding.statusSpinner.adapter = statusAdapter
 
-        // Toggle visibility of selected date layout based on switch state
+        // Set visibility of selected date layout based onCreate
         binding.selectedDateLinearLayout.visibility = View.GONE
+    }
 
+    private fun setupEventHandlers() {
+        // Set click listener for select date button
+        binding.selectDateButton.setOnClickListener {
+            showDatePickerDialog()
+        }
+
+        // Set click listener for due date toggle switch
         binding.dueDateToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.selectedDateLinearLayout.visibility = View.VISIBLE
@@ -134,9 +134,7 @@ class EditTaskActivity : AppCompatActivity() {
         binding.updateButton.setOnClickListener {
             updateTask()
         }
-    }
 
-    private fun bindMenuBarButtons() {
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -206,13 +204,22 @@ class EditTaskActivity : AppCompatActivity() {
 
     private fun updateTask() {
         taskId?.let {
+            val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val name = binding.nameEditTextView.text.toString()
             val notes = binding.notesEditTextView.text.toString()
             val status = binding.statusSpinner.selectedItem.toString()
             val category = binding.categorySpinner.selectedItem.toString()
             val hasDueDate = binding.dueDateToggleSwitch.isChecked
-            val dueDate = if (hasDueDate) binding.selectedDateLabelTextView.text.toString() else ""
             val isCompleted = status == "Complete"
+
+            val dueDate = if (hasDueDate && binding.selectedDateLabelTextView.text.toString().isNotEmpty()) {
+                displayDateFormat.parse(binding.selectedDateLabelTextView.text.toString())?.let { date ->
+                    storageDateFormat.format(date)
+                } ?: ""
+            } else {
+                ""
+            }
 
             val updatedTask = Task(
                 id = it,
@@ -237,5 +244,7 @@ class EditTaskActivity : AppCompatActivity() {
             Toast.makeText(this, "Error updating task", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
 }

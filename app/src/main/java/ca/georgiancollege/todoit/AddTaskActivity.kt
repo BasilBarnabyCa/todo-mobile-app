@@ -34,10 +34,54 @@ class AddTaskActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeFormElements()
-        bindMenuBarButtons()
+        setupEventHandlers()
     }
 
-    private fun bindMenuBarButtons() {
+    private fun initializeFormElements() {
+        binding.pinImageView.setOnClickListener {
+            isPinned = !isPinned
+            if (isPinned) {
+                binding.pinImageView.alpha = 1.0f
+                binding.pinImageView.setImageResource(R.drawable.ic_pinned)
+            } else {
+                binding.pinImageView.alpha = context.resources.getFloat(R.dimen.dimmed_image_alpha)
+                binding.pinImageView.setImageResource(R.drawable.ic_unpinned)
+            }
+        }
+
+        // Selection Options for spinner
+        val categories = arrayOf("Work", "Personal", "School", "Fitness")
+
+        // Create an ArrayAdapter using the custom spinner item layout and dropdown layout
+        val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+
+        // Apply the adapter to the spinner
+        binding.categorySpinner.adapter = adapter
+
+        // Toggle visibility of selected date layout based on switch state
+        binding.selectedDateLinearLayout.visibility = View.GONE
+
+        binding.dueDateToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.selectedDateLinearLayout.visibility = View.VISIBLE
+            } else {
+                binding.selectedDateLinearLayout.visibility = View.GONE
+                binding.selectedDateLabelTextView.text = context.getString(R.string.select_a_date_label_text)
+            }
+        }
+
+        binding.saveButton.setOnClickListener {
+            saveTask()
+        }
+
+        // Set click listener for select date button
+        binding.selectDateButton.setOnClickListener {
+            showDatePickerDialog()
+        }
+    }
+
+    private fun setupEventHandlers() {
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -75,51 +119,6 @@ class AddTaskActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeFormElements() {
-        binding.pinImageView.setOnClickListener {
-            isPinned = !isPinned
-            if (isPinned) {
-                binding.pinImageView.alpha = 1.0f
-                binding.pinImageView.setImageResource(R.drawable.ic_pinned)
-            } else {
-                binding.pinImageView.alpha = context.resources.getFloat(R.dimen.dimmed_image_alpha)
-                binding.pinImageView.setImageResource(R.drawable.ic_unpinned)
-            }
-        }
-
-        // Selection Options for spinner
-        val categories = arrayOf("Work", "Personal", "School", "Fitness")
-
-        // Create an ArrayAdapter using the custom spinner item layout and dropdown layout
-        val adapter = ArrayAdapter(this, R.layout.spinner_item, categories)
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-
-        // Apply the adapter to the spinner
-        binding.categorySpinner.adapter = adapter
-
-
-        // Toggle visibility of selected date layout based on switch state
-        binding.selectedDateLinearLayout.visibility = View.GONE
-
-        binding.dueDateToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.selectedDateLinearLayout.visibility = View.VISIBLE
-            } else {
-                binding.selectedDateLinearLayout.visibility = View.GONE
-                binding.selectedDateLabelTextView.text = context.getString(R.string.select_a_date_label_text)
-            }
-        }
-
-        binding.saveButton.setOnClickListener {
-            saveTask()
-        }
-
-        // Set click listener for select date button
-        binding.selectDateButton.setOnClickListener {
-            showDatePickerDialog()
-        }
-    }
-
     /**
      * Shows a date picker dialog.
      */
@@ -139,8 +138,8 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     private fun saveTask() {
-        val incomingDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         if(binding.nameEditTextView.text.toString().isEmpty() || binding.notesEditTextView.text.toString().isEmpty() || binding.categorySpinner.selectedItem.toString().isEmpty()) {
             Toast.makeText(this, "Name, category, and notes are required", Toast.LENGTH_SHORT).show()
@@ -156,12 +155,12 @@ class AddTaskActivity : AppCompatActivity() {
                 category = binding.categorySpinner.selectedItem.toString(),
                 name = binding.nameEditTextView.text.toString(),
                 notes = binding.notesEditTextView.text.toString(),
-                status = "Not Started",
+                status = "Not started",
                 completed = false,
                 pinned = isPinned,
                 hasDueDate = dueDate.isNotEmpty(),
-                dueDate = if (dueDate.isEmpty()) "" else incomingDateFormat.parse(dueDate)?.let { date -> dateFormat.format(date) } ?: "",
-                createDate = dateFormat.format(Date())
+                dueDate = if (dueDate.isEmpty()) "" else displayDateFormat.parse(dueDate)?.let { date -> storageDateFormat.format(date) } ?: "",
+                createDate = storageDateFormat.format(Date()) // Store the current date in ISO format
             )
 
             viewModel.saveTask(task)

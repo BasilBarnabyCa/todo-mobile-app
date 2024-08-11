@@ -24,7 +24,9 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
+    private fun setupEventHandlers() {
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -60,16 +62,5 @@ class UserProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-
-//        binding.viewEditButton.setOnClickListener {
-//            startActivity(Intent(this, EditTaskActivity::class.java))
-//            finish()
-//        }
-//
-//        binding.viewDetailsButton.setOnClickListener {
-//            startActivity(Intent(this, DetailsActivity::class.java))
-//            finish()
-//        }
-
     }
 }

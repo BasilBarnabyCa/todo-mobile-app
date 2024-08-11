@@ -41,7 +41,7 @@ class CalendarActivity : AppCompatActivity() {
         dataManager = DataManager.instance()
 
         // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
-        val adapter = TaskAdapter ({task: Task ->
+        val adapter = TaskAdapter({ task: Task ->
             val intent = Intent(this, DetailsActivity::class.java).apply {
                 putExtra("taskId", task.id)
             }
@@ -76,7 +76,30 @@ class CalendarActivity : AppCompatActivity() {
         }
 
         // TODO: Fix the calendar header text color
+        setupEventHandlers()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadTasksByDueDate(formattedDate)
+    }
+
+    private fun setupEventHandlers() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    val intent = Intent(this@CalendarActivity, ListActivity::class.java).apply {
+                        putExtra("searchQuery", it)
+                    }
+                    startActivity(intent)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
 
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -104,24 +127,5 @@ class CalendarActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    val intent = Intent(this@CalendarActivity, ListActivity::class.java).apply {
-                        putExtra("searchQuery", it)
-                    }
-                    startActivity(intent)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean { return true }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadTasksByDueDate(formattedDate)
     }
 }

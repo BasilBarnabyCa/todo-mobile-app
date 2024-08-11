@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
  * A control class and wrapper for displaying tasks in a RecyclerView.
@@ -45,11 +47,22 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
         val task = getItem(position)
         viewHolder.binding.taskTitleTextView.text = task.name
 
+        val incomingDateFormat =
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val displayDateFormat =
+            SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
         if (task.dueDate.isNotEmpty() && task.dueDate != "Please select a date") {
+            val dueDate = if (task.hasDueDate && task.dueDate.isNotEmpty()) {
+                incomingDateFormat.parse(task.dueDate)
+                    ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+            } else {
+                "Not set"
+            }
             viewHolder.binding.taskDateTimeTextView.text = buildString {
                 append(task.notes)
                 append(" - ")
-                append(task.dueDate)
+                append(dueDate)
             }
         } else {
             viewHolder.binding.taskDateTimeTextView.text = task.notes
@@ -69,14 +82,14 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
     private fun updateStatus(viewHolder: ViewHolder, position: Int) {
         val task = getItem(position)
         when (task.status) {
-            "Not Started" -> {
+            "Not started" -> {
                 viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_not_started)
                 viewHolder.binding.taskTitleTextView.paintFlags = viewHolder.binding.taskTitleTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskDateTimeTextView.paintFlags = viewHolder.binding.taskDateTimeTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskTitleTextView.alpha = 1.0f
                 viewHolder.binding.taskDateTimeTextView.alpha = 1.0f
             }
-            "In Progress" -> {
+            "In progress" -> {
                 viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_in_progress)
                 viewHolder.binding.taskTitleTextView.paintFlags = viewHolder.binding.taskTitleTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskDateTimeTextView.paintFlags = viewHolder.binding.taskDateTimeTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -99,10 +112,10 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
     private fun cycleStatus(position: Int) {
         val task = getItem(position)
         task.status = when (task.status) {
-            "Not Started" -> "In Progress"
-            "In Progress" -> "Complete"
-            "Complete" -> "Not Started"
-            else -> "Not Started"
+            "Not started" -> "In progress"
+            "In progress" -> "Complete"
+            "Complete" -> "Not started"
+            else -> "Not started"
         }
 
         task.completed = task.status == "Complete"

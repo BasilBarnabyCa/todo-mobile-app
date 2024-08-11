@@ -45,21 +45,22 @@ class MainActivity : AppCompatActivity() {
         dataManager = DataManager.instance()
 
         // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
-        val taskAdapter = TaskAdapter ({task: Task ->
+        val taskAdapter = TaskAdapter({ task: Task ->
             val intent = Intent(this, DetailsActivity::class.java).apply {
                 putExtra("taskId", task.id)
             }
             startActivity(intent)
         }, viewModel)
 
-        val pinnedTaskAdapter = PinnedTaskAdapter {task: Task ->
+        val pinnedTaskAdapter = PinnedTaskAdapter { task: Task ->
             val intent = Intent(this, DetailsActivity::class.java).apply {
                 putExtra("taskId", task.id)
             }
             startActivity(intent)
         }
 
-        binding.pinnedTasksRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.pinnedTasksRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.pinnedTasksRecyclerView.adapter = pinnedTaskAdapter
 
         binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -79,6 +80,32 @@ class MainActivity : AppCompatActivity() {
         // Load all Tasks rom the database manager via viewModel
         viewModel.loadPinnedTasks()
         viewModel.loadUpcomingTasks()
+
+        setupEventHandlers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPinnedTasks()
+        viewModel.loadUpcomingTasks()
+    }
+
+    private fun setupEventHandlers() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    val intent = Intent(this@MainActivity, ListActivity::class.java).apply {
+                        putExtra("searchQuery", it)
+                    }
+                    startActivity(intent)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
 
         binding.menuBar.calendarButton.setOnClickListener {
             Log.d("MenuBar", "Calendar button clicked")
@@ -106,25 +133,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    val intent = Intent(this@MainActivity, ListActivity::class.java).apply {
-                        putExtra("searchQuery", it)
-                    }
-                    startActivity(intent)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean { return true }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadPinnedTasks()
-        viewModel.loadUpcomingTasks()
     }
 }

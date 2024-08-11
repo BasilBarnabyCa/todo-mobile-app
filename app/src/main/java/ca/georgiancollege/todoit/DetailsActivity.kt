@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityDetailsBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
  * DetailsActivity displays task details and handles user interactions.
@@ -35,83 +37,70 @@ class DetailsActivity : AppCompatActivity() {
         dataManager = DataManager.instance()
 
         taskId = intent.getStringExtra("taskId")
-
-        if (taskId != null) {
-            viewModel.loadTaskById(taskId!!)
-        } else {
-            Toast.makeText(this, "Invalid task ID", Toast.LENGTH_SHORT).show()
-        }
+        checkTaskId()
 
         // Observe the LiveData from the ViewModel
         viewModel.task.observe(this) { task ->
             task?.let {
-                val status = task.status
-                val category = task.category
-                val dueDate = task.dueDate
+                val incomingDateFormat =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val displayDateFormat =
+                    SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
+                val dueDate = if (task.hasDueDate && task.dueDate.isNotEmpty()) {
+                    incomingDateFormat.parse(task.dueDate)
+                        ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+                } else {
+                    "Not set"
+                }
+
+                val createDate = if (task.createDate.isNotEmpty()) {
+                    incomingDateFormat.parse(task.createDate)
+                        ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+                } else {
+                    "Not set"
+                }
 
                 binding.detailsTitleTextView.text = task.name
                 binding.notesTextView.text = task.notes
-                binding.createdDateTextView.text = task.createDate
+                binding.createdDateTextView.text = createDate
+                binding.dueDateTextView.text = dueDate
 
-                if (dueDate.isEmpty()) {
-                    binding.dueDateTextView.text = getString(R.string.due_date_not_set_text)
-                } else {
-                    binding.dueDateTextView.text = dueDate
+                when (task.status) {
+                    "Not started" -> binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+                    "In progress" -> binding.statusTextView.setTextColor(getColor(R.color.sky))
+                    "Complete" -> binding.statusTextView.setTextColor(getColor(R.color.emerald))
+                    else -> Log.e("DetailsActivity", "Invalid status: ${task.status}")
                 }
+                binding.statusTextView.text = task.status
 
-                when (status) {
-                    "Not Started" -> {
-                        binding.statusTextView.setTextColor(getColor(R.color.light_gray))
-                    }
-                    "In Progress" -> {
-                        binding.statusTextView.setTextColor(getColor(R.color.sky))
-                    }
-                    "Complete" -> {
-                        binding.statusTextView.setTextColor(getColor(R.color.emerald))
-                    }
-                    else -> {
-                        Log.e("DetailsActivity", "Invalid status: $status")
-                    }
+                when (task.category) {
+                    "Fitness" -> binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
+                    "School" -> binding.categoryImageView.setImageResource(R.drawable.ic_book)
+                    "Work" -> binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
+                    "Personal" -> binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+                    else -> Log.e("DetailsActivity", "Invalid category: ${task.category}")
                 }
-                binding.statusTextView.text = status
-
-                when (category) {
-                    "Fitness" -> {
-                        binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
-                    }
-                    "School" -> {
-                        binding.categoryImageView.setImageResource(R.drawable.ic_book)
-                    }
-                    "Work" -> {
-                        binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
-                    }
-                    "Personal" -> {
-                        binding.categoryImageView.setImageResource(R.drawable.ic_organic)
-                    }
-                    else -> {
-                        Log.e("DetailsActivity", "Invalid category: $category")
-                    }
-                }
-                binding.categoryTextView.text = category
+                binding.categoryTextView.text = task.category
             }
         }
 
-        bindActionButtons()
-        bindMenuBarButtons()
+
+        setupEventHandlers()
     }
 
-    private fun bindActionButtons() {
+    private fun setupEventHandlers() {
         // Set click listeners for status buttons
         binding.notStartedIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.not_started_text)
             binding.statusTextView.setTextColor(getColor(R.color.light_gray))
-            Toast.makeText(this, "Status changed to Not Started!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Status changed to Not started!", Toast.LENGTH_SHORT).show()
         }
 
         binding.inProgressIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.in_progress_text)
             binding.statusTextView.setTextColor(getColor(R.color.sky))
-            Toast.makeText(this, "Status changed to In Progress!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Status changed to In progress!", Toast.LENGTH_SHORT).show()
         }
 
         binding.completeIconButton.setOnClickListener {
@@ -130,6 +119,7 @@ class DetailsActivity : AppCompatActivity() {
                 putExtra("taskId", taskId)
             }
             startActivity(intent)
+            finish()
         }
 
         binding.deleteIconButton.setOnClickListener {
@@ -146,9 +136,7 @@ class DetailsActivity : AppCompatActivity() {
                 .setNegativeButton("No", null)
                 .show()
         }
-    }
 
-    private fun bindMenuBarButtons() {
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
             Log.d("MenuBar", "Home button clicked")
@@ -182,6 +170,20 @@ class DetailsActivity : AppCompatActivity() {
 
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        taskId = intent.getStringExtra("taskId")
+        checkTaskId()
+    }
+
+    private fun checkTaskId() {
+        if (taskId != null) {
+            viewModel.loadTaskById(taskId!!)
+        } else {
+            Toast.makeText(this, "Invalid task ID", Toast.LENGTH_SHORT).show()
         }
     }
 }
