@@ -1,3 +1,16 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: DetailsActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.content.Intent
@@ -12,9 +25,13 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
- * DetailsActivity displays task details and handles user interactions.
+ * DetailsActivity displays detailed information about a specific task.
+ * It allows users to view, edit, delete, and update the status of the task.
  *
- * @property binding The view binding for the details activity layout.
+ * @property binding The view binding for the details activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing the task data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
+ * @property taskId The ID of the task being displayed, retrieved from the intent.
  */
 class DetailsActivity : AppCompatActivity() {
 

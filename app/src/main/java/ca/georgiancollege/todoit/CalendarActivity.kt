@@ -1,3 +1,16 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: CalendarActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.content.Intent
@@ -14,10 +27,13 @@ import java.util.Calendar
 import java.util.Locale
 
 /**
- * CalendarActivity displays tasks scheduled for today and handles user interactions.
+ * CalendarActivity displays tasks scheduled for today and handles user interactions with a calendar view.
+ * Users can select a date to view tasks scheduled for that specific day.
  *
- * @property binding The view binding for the calendar activity layout.
- * @property todayTasks Array of Task objects representing today's tasks.
+ * @property binding The view binding for the calendar activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing task-related data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
+ * @property formattedDate A string representing the currently selected date in "MMMM dd, yyyy" format.
  */
 class CalendarActivity : AppCompatActivity() {
 
@@ -26,11 +42,6 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var dataManager: DataManager
     private var formattedDate: String = ""
 
-    /**
-     * Called when the activity is first created.
-     *
-     * @param savedInstanceState The saved instance state of the activity.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalendarViewBinding.inflate(layoutInflater)
@@ -79,11 +90,19 @@ class CalendarActivity : AppCompatActivity() {
         setupEventHandlers()
     }
 
+    /**
+     * Called when the activity resumes from a paused state.
+     * Reloads the tasks for the current date to ensure the data is up-to-date.
+     */
     override fun onResume() {
         super.onResume()
         viewModel.loadTasksByDueDate(formattedDate)
     }
 
+    /**
+     * Sets up event handlers for the SearchView and the menu bar buttons.
+     * Handles navigation to other activities based on user interactions.
+     */
     private fun setupEventHandlers() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

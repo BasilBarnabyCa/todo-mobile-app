@@ -1,12 +1,14 @@
 /** Author: Basil Barnaby
  * Student Number: 200540109
  * Course: COMP3025 - Mobile and Pervasive Computing
- * Assignment: 3 - Todo App Prototype
- * Date: July 22, 2024
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
  * Description: This is a todo app that allows users to add, edit, and delete tasks.
  * App Name: Todo.iT
  * Target Device: Google Pixel 8 Pro
- * Version: 0.1
+ * Version: 1.0
+ *
+ * Filename: MainActivity.kt
  */
 
 package ca.georgiancollege.todoit
@@ -25,9 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore
  * MainActivity serves as the entry point of the Todo.iT application.
  * It displays pinned and upcoming tasks, and handles navigation to other activities.
  *
- * @property binding The view binding for the main activity layout.
- * @property upcomingTasks Array of Task objects representing upcoming tasks.
- * @property pinnedTasks Array of Task objects representing pinned tasks.
+ * @property binding The view binding for the main activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing task-related data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -84,12 +86,20 @@ class MainActivity : AppCompatActivity() {
         setupEventHandlers()
     }
 
+    /**
+     * Called when the activity resumes from a paused state.
+     * Reloads the pinned and upcoming tasks to ensure the data is up-to-date.
+     */
     override fun onResume() {
         super.onResume()
         viewModel.loadPinnedTasks()
         viewModel.loadUpcomingTasks()
     }
 
+    /**
+     * Sets up event handlers for the SearchView and the menu bar buttons.
+     * Handles navigation to other activities based on user interactions.
+     */
     private fun setupEventHandlers() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -107,29 +117,22 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // Set click listeners for menu bar buttons
         binding.menuBar.calendarButton.setOnClickListener {
-            Log.d("MenuBar", "Calendar button clicked")
-
             startActivity(Intent(this, CalendarActivity::class.java))
             finish()
         }
 
         binding.menuBar.addTaskButton.setOnClickListener {
-            Log.d("MenuBar", "Add task button clicked")
-
             startActivity(Intent(this, AddTaskActivity::class.java))
         }
 
         binding.menuBar.listButton.setOnClickListener {
-            Log.d("MenuBar", "List button clicked")
-
             startActivity(Intent(this, ListActivity::class.java))
             finish()
         }
 
         binding.menuBar.userProfileButton.setOnClickListener {
-            Log.d("MenuBar", "User profile button clicked")
-
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }

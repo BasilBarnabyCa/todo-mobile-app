@@ -1,3 +1,16 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: AddTaskActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.app.DatePickerDialog
@@ -19,7 +32,13 @@ import java.util.Locale
 import java.util.UUID
 
 /**
- * Activity for adding new tasks with details including category, notes, due date, and creation date.
+ * AddTaskActivity allows users to add new tasks with details including the category, notes, due date, and pin status.
+ *
+ * @property binding The view binding for the add task activity layout, providing access to UI elements.
+ * @property calendar Calendar instance used for date selection.
+ * @property context The context of the current activity.
+ * @property viewModel The ViewModel instance for managing and observing task data.
+ * @property isPinned Boolean indicating whether the task is pinned.
  */
 class AddTaskActivity : AppCompatActivity() {
 
@@ -29,7 +48,12 @@ class AddTaskActivity : AppCompatActivity() {
     private val viewModel: TaskViewModel by viewModels()
     private var isPinned = false
 
-
+    /**
+     * Called when the activity is first created.
+     * Initializes the UI components and sets up event handlers.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
@@ -39,6 +63,9 @@ class AddTaskActivity : AppCompatActivity() {
         setupEventHandlers()
     }
 
+    /**
+     * Initializes form elements such as the category spinner and handles initial UI setup.
+     */
     private fun initializeFormElements() {
 
         // Handle pin icon click
@@ -62,30 +89,11 @@ class AddTaskActivity : AppCompatActivity() {
 
         // Apply the adapter to the spinner
         binding.categorySpinner.adapter = adapter
-
-        // Toggle visibility of selected date layout based on switch state
-        binding.selectedDateLinearLayout.visibility = View.GONE
-
-        binding.dueDateToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.selectedDateLinearLayout.visibility = View.VISIBLE
-            } else {
-                binding.selectedDateLinearLayout.visibility = View.GONE
-                binding.selectedDateLabelTextView.text =
-                    context.getString(R.string.select_a_date_label_text)
-            }
-        }
-
-        binding.saveButton.setOnClickListener {
-            saveTask()
-        }
-
-        // Set click listener for select date button
-        binding.selectDateButton.setOnClickListener {
-            showDatePickerDialog()
-        }
     }
 
+    /**
+     * Sets up event handlers for various UI elements, including the save button, date picker, and menu bar buttons.
+     */
     private fun setupEventHandlers() {
 
         // Text watcher for name edit text
@@ -108,6 +116,28 @@ class AddTaskActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        // Toggle visibility of selected date layout based on switch state
+        binding.selectedDateLinearLayout.visibility = View.GONE
+
+        binding.dueDateToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.selectedDateLinearLayout.visibility = View.VISIBLE
+            } else {
+                binding.selectedDateLinearLayout.visibility = View.GONE
+                binding.selectedDateLabelTextView.text =
+                    context.getString(R.string.select_a_date_label_text)
+            }
+        }
+
+        binding.saveButton.setOnClickListener {
+            saveTask()
+        }
+
+        // Set click listener for select date button
+        binding.selectDateButton.setOnClickListener {
+            showDatePickerDialog()
+        }
 
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
@@ -147,7 +177,7 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     /**
-     * Shows a date picker dialog.
+     * Shows a date picker dialog for selecting the due date.
      */
     private fun showDatePickerDialog() {
         val datePickerDialog = DatePickerDialog(
@@ -165,6 +195,10 @@ class AddTaskActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    /**
+     * Saves a new task to the database.
+     * This method validates the input, creates a new task, and then saves it using the ViewModel.
+     */
     private fun saveTask() {
         val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

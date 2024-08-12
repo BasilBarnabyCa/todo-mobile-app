@@ -1,3 +1,16 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: EditTaskActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.app.DatePickerDialog
@@ -17,7 +30,15 @@ import java.util.Calendar
 import java.util.Locale
 
 /**
- * Activity for editing existing tasks with details including category, notes, due date, and creation date.
+ * EditTaskActivity allows users to edit the details of an existing task, including the name, category, status, notes, due date, and pin status.
+ *
+ * @property binding The view binding for the edit task activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing the task data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
+ * @property taskId The ID of the task being edited, retrieved from the intent.
+ * @property isPinned Boolean indicating whether the task is pinned.
+ * @property createDate The creation date of the task, used when updating the task.
+ * @property calendar Calendar instance used for date selection.
  */
 class EditTaskActivity : AppCompatActivity() {
 
@@ -29,6 +50,12 @@ class EditTaskActivity : AppCompatActivity() {
     private var createDate: String = ""
     private var calendar = Calendar.getInstance()
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the UI components, loads task details, and sets up event handlers.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
@@ -85,6 +112,9 @@ class EditTaskActivity : AppCompatActivity() {
         setupEventHandlers()
     }
 
+    /**
+     * Initializes form elements such as spinners and handles initial UI setup.
+     */
     private fun initializeFormElements() {
         // Handle pin icon click
         binding.pinImageView.setOnClickListener {
@@ -116,6 +146,9 @@ class EditTaskActivity : AppCompatActivity() {
         binding.selectedDateLinearLayout.visibility = View.GONE
     }
 
+    /**
+     * Sets up event handlers for various UI elements, including the date picker, pin toggle, and update button.
+     */
     private fun setupEventHandlers() {
 
         // Text watcher for name edit text
@@ -197,7 +230,7 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     /**
-     * Shows a date picker dialog.
+     * Shows a date picker dialog for selecting the due date.
      */
     private fun showDatePickerDialog() {
         val datePickerDialog = DatePickerDialog(
@@ -215,6 +248,11 @@ class EditTaskActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    /**
+     * Toggles the pin state of the task and updates the UI accordingly.
+     *
+     * @param pinState Boolean indicating the current pin state of the task.
+     */
     private fun togglePinState(pinState: Boolean) {
         if (pinState) {
             binding.pinImageView.alpha = 1.0f
@@ -226,6 +264,9 @@ class EditTaskActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Updates the task with the current values from the UI and saves it to the database.
+     */
     private fun updateTask() {
         taskId?.let {
             val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
