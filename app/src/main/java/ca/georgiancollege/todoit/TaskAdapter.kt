@@ -1,51 +1,73 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: TaskAdapter.kt
+ */
+
 package ca.georgiancollege.todoit
 
+import android.content.Context
 import android.graphics.Paint
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
- * A control class and wrapper for displaying pinned tasks in a RecyclerView.
+ * TaskAdapter is a RecyclerView adapter for displaying tasks in a RecyclerView.
+ * It binds task data to the task row layout and handles click events on individual tasks,
+ * including updating the task status.
  *
- * @param dataSet An array of Task objects to be displayed.
+ * @param listener A lambda function that handles task click events.
+ * @param viewModel The ViewModel instance used to save task status changes.
  */
-class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTaskClickListener) :
-    RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: TaskViewModel, private val context: Context) :
+    ListAdapter<Task, TaskAdapter.ViewHolder>(TaskComparator()) {
 
     /**
-     * ViewHolder class that holds the view binding for each task card.
+     * ViewHolder class that holds the view binding for each task row.
+     * It initializes the click listener for the root view and the status image view of the task row.
      *
-     * @param binding The view binding for the task card.
+     * @param binding The view binding for the task row layout.
      */
-    inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(val binding: TaskRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener(this)
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener(getItem(position)) // Pass the clicked Task to the lambda
+                }
+            }
             binding.statusImageView.setOnClickListener {
                 cycleStatus(adapterPosition)
-            }
-        }
-
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onTaskClick(position)
             }
         }
     }
 
     /**
      * Called when the RecyclerView needs a new ViewHolder to represent an item.
+     * This method inflates the task row layout and creates a ViewHolder for it.
      *
      * @param viewGroup The parent view that the new view will be attached to.
-     * @param viewType The view type of the new view.
-     * @return A new ViewHolder that holds a view of the given view type.
+     * @param viewType The view type of the new view (not used here as all views are the same type).
+     * @return A new ViewHolder that holds a view of the task row layout.
      */
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Inflate the layout with view binding
         val binding =
             TaskRowItemBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return ViewHolder(binding)
@@ -53,24 +75,55 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
 
     /**
      * Called by RecyclerView to display the data at the specified position.
+     * This method binds the task data to the appropriate views within the task row layout.
      *
      * @param viewHolder The ViewHolder which should be updated to represent the contents of the item at the given position.
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.binding.taskTitleTextView.text = dataSet[position].title
+        val task = getItem(position)
+        viewHolder.binding.taskTitleTextView.text = task.name
 
-        if (dataSet[position].dueDate.isNotEmpty() && dataSet[position].dueDate != "Please select a date") {
-            viewHolder.binding.taskDateTimeTextView.text = buildString {
-                append(dataSet[position].notes)
-                append(" - ")
-                append(dataSet[position].dueDate)
+        val incomingDateFormat =
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val displayDateFormat =
+            SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
+
+        if (task.dueDate.isNotEmpty() && task.dueDate != "Please select a date") {
+            val parsedDueDate = incomingDateFormat.parse(task.dueDate)
+            val dueDate = if (task.hasDueDate && parsedDueDate != null) {
+                displayDateFormat.format(parsedDueDate)
+            } else {
+                "Not set"
             }
+
+            /**
+             * Documentation for SpannableString:
+             * https://developer.android.com/reference/android/text/Spannable
+             */
+            val textToShow = "${task.notes} - $dueDate"
+            val spannableString = SpannableString(textToShow)
+
+            val startIndex = textToShow.indexOf(dueDate)
+            val endIndex = startIndex + dueDate.length
+
+            if (parsedDueDate != null && parsedDueDate.before(currentDate) && !task.completed) {
+                // Set the date text color to red if the due date is in the past and not complete
+                spannableString.setSpan(
+                    ForegroundColorSpan(context.getColor(R.color.red)),
+                    startIndex,
+                    endIndex,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+
+            viewHolder.binding.taskDateTimeTextView.text = spannableString
         } else {
-            viewHolder.binding.taskDateTimeTextView.text = dataSet[position].notes
+            viewHolder.binding.taskDateTimeTextView.text = task.notes
         }
 
-        when (dataSet[position].category) {
+        when (task.category) {
             "Fitness" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
             "Work" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
             "School" -> viewHolder.binding.categoryImageView.setImageResource(R.drawable.ic_book)
@@ -82,22 +135,22 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
     }
 
     /**
-     * Updates the status of the task at the given position.
+     * Updates the UI elements related to the task's status, such as the status image and text formatting.
      *
-     * @param viewHolder The ViewHolder for the task card.
-     * @param position The position of the task in the data set.
+     * @param viewHolder The ViewHolder containing the views to be updated.
+     * @param position The position of the task within the adapter's data set.
      */
     private fun updateStatus(viewHolder: ViewHolder, position: Int) {
-        val task = dataSet[position]
+        val task = getItem(position)
         when (task.status) {
-            "Not Started" -> {
+            "Not started" -> {
                 viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_not_started)
                 viewHolder.binding.taskTitleTextView.paintFlags = viewHolder.binding.taskTitleTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskDateTimeTextView.paintFlags = viewHolder.binding.taskDateTimeTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskTitleTextView.alpha = 1.0f
                 viewHolder.binding.taskDateTimeTextView.alpha = 1.0f
             }
-            "In Progress" -> {
+            "In progress" -> {
                 viewHolder.binding.statusImageView.setImageResource(R.drawable.ic_in_progress)
                 viewHolder.binding.taskTitleTextView.paintFlags = viewHolder.binding.taskTitleTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 viewHolder.binding.taskDateTimeTextView.paintFlags = viewHolder.binding.taskDateTimeTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -118,32 +171,23 @@ class TaskAdapter(private val dataSet: Array<Task>, private val listener: OnTask
     }
 
     /**
-     * Cycles the status of the task at the given position.
+     * Cycles the task's status through "Not started", "In progress", and "Complete".
+     * Updates the task status both in the UI and in the database via the ViewModel.
      *
-     * @param position The position of the task in the data set.
+     * @param position The position of the task within the adapter's data set.
      */
     private fun cycleStatus(position: Int) {
-        val task = dataSet[position]
+        val task = getItem(position)
         task.status = when (task.status) {
-            "Not Started" -> "In Progress"
-            "In Progress" -> "Complete"
-            "Complete" -> "Not Started"
-            else -> "Not Started"
+            "Not started" -> "In progress"
+            "In progress" -> "Complete"
+            "Complete" -> "Not started"
+            else -> "Not started"
         }
+
+        task.completed = task.status == "Complete"
+
         notifyItemChanged(position)
-    }
-
-    /**
-     * Returns the total number of items in the data set held by the adapter.
-     *
-     * @return The total number of items in this adapter.
-     */
-    override fun getItemCount() = dataSet.size
-
-    /**
-     * Interface definition for a callback to be invoked when a task is clicked.
-     */
-    public interface OnTaskClickListener {
-        fun onTaskClick(position: Int)
+        viewModel.saveTask(task)
     }
 }

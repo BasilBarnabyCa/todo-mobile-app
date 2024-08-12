@@ -1,21 +1,44 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: DetailsActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityDetailsBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
- * DetailsActivity displays task details and handles user interactions.
+ * DetailsActivity displays detailed information about a specific task.
+ * It allows users to view, edit, delete, and update the status of the task.
  *
- * @property binding The view binding for the details activity layout.
+ * @property binding The view binding for the details activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing the task data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
+ * @property taskId The ID of the task being displayed, retrieved from the intent.
  */
 class DetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var dataManager: DataManager
+    private var taskId: String? = null
 
     /**
      * Called when the activity is first created.
@@ -27,59 +50,136 @@ class DetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get task data from intent
-        val category = intent.getStringExtra("category")
-        val title = intent.getStringExtra("title")
-        val notes = intent.getStringExtra("notes")
-        val status = intent.getStringExtra("status")
-        val dueDate = intent.getStringExtra("dueDate")
-        val createDate = intent.getStringExtra("createDate")
+        // Alias for the DataManager singleton
+        dataManager = DataManager.instance()
 
-        // Set task data to text views with appropriate conditions
-        binding.detailsTitleTextView.text = title
-        binding.notesTextView.text = notes
+        taskId = intent.getStringExtra("taskId")
+        checkTaskId()
 
-        if (dueDate.isNullOrEmpty()) {
-            binding.dueDateTextView.text = getString(R.string.due_date_not_set_text)
-        } else {
-            binding.dueDateTextView.text = dueDate
+        // Observe the LiveData from the ViewModel
+        viewModel.task.observe(this) { task ->
+            task?.let {
+                val incomingDateFormat =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val displayDateFormat =
+                    SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+
+                val dueDate = if (task.hasDueDate && task.dueDate.isNotEmpty()) {
+                    incomingDateFormat.parse(task.dueDate)
+                        ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+                } else {
+                    "Not set"
+                }
+
+                val createDate = if (task.createDate.isNotEmpty()) {
+                    incomingDateFormat.parse(task.createDate)
+                        ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+                } else {
+                    "Not set"
+                }
+
+                binding.detailsTitleTextView.text = task.name
+                binding.notesTextView.text = task.notes
+                binding.createdDateTextView.text = createDate
+                binding.dueDateTextView.text = dueDate
+
+                when (task.status) {
+                    "Not started" -> binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+                    "In progress" -> binding.statusTextView.setTextColor(getColor(R.color.sky))
+                    "Complete" -> binding.statusTextView.setTextColor(getColor(R.color.emerald))
+                    else -> Log.e("DetailsActivity", "Invalid status: ${task.status}")
+                }
+                binding.statusTextView.text = task.status
+
+                when (task.category) {
+                    "Fitness" -> binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
+                    "School" -> binding.categoryImageView.setImageResource(R.drawable.ic_book)
+                    "Work" -> binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
+                    "Personal" -> binding.categoryImageView.setImageResource(R.drawable.ic_organic)
+                    else -> Log.e("DetailsActivity", "Invalid category: ${task.category}")
+                }
+                binding.categoryTextView.text = task.category
+
+                // Set the pin/unpin icon based on the current task state
+                togglePinState(task.pinned)
+            }
         }
-        binding.createdDateTextView.text = createDate
 
-        when (status) {
-            "Not Started" -> {
-                binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+        setupEventHandlers()
+    }
+
+    private fun setupEventHandlers() {
+        // Set click listeners for status buttons
+        binding.notStartedIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.not_started_text)
+            viewModel.task.value?.let {
+                it.status = "Not started"
+                viewModel.saveTask(it)
             }
-            "In Progress" -> {
-                binding.statusTextView.setTextColor(getColor(R.color.sky))
+            binding.statusTextView.setTextColor(getColor(R.color.light_gray))
+            Toast.makeText(this, "Task marked as Not started!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.inProgressIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.in_progress_text)
+            viewModel.task.value?.let {
+                it.status = "In progress"
+                viewModel.saveTask(it)
             }
-            "Complete" -> {
-                binding.statusTextView.setTextColor(getColor(R.color.emerald))
+            binding.statusTextView.setTextColor(getColor(R.color.sky))
+            Toast.makeText(this, "Task marked as In progress!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.completeIconButton.setOnClickListener {
+            binding.statusTextView.text = getString(R.string.complete_text)
+            viewModel.task.value?.let {
+                it.status = "Complete"
+                viewModel.saveTask(it)
             }
-            else -> {
-                Log.e("DetailsActivity", "Invalid status: $status")
+            binding.statusTextView.setTextColor(getColor(R.color.emerald))
+            Toast.makeText(this, "Task marked as Complete!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.pinIconButton.setOnClickListener {
+            viewModel.task.value?.let {
+                it.pinned = !it.pinned
+                viewModel.saveTask(it)
+                togglePinState(it.pinned)
+                Toast.makeText(
+                    this,
+                    if (it.pinned) "Task pinned!" else "Task unpinned!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
-        binding.statusTextView.text = status
 
-        when (category) {
-            "Fitness" -> {
-                binding.categoryImageView.setImageResource(R.drawable.ic_power_lifting)
-            }
-            "School" -> {
-                binding.categoryImageView.setImageResource(R.drawable.ic_book)
-            }
-            "Work" -> {
-                binding.categoryImageView.setImageResource(R.drawable.ic_briefcase)
-            }
-            "Personal" -> {
-                binding.categoryImageView.setImageResource(R.drawable.ic_organic)
-            }
-            else -> {
-                Log.e("DetailsActivity", "Invalid category: $category")
-            }
+        // Set click listeners for edit, delete, and back buttons
+        binding.backIconButton.setOnClickListener {
+            finish()
         }
-        binding.categoryTextView.text = category
+
+        binding.editIconButton.setOnClickListener {
+            val intent = Intent(this, EditTaskActivity::class.java).apply {
+                putExtra("taskId", taskId)
+            }
+            startActivity(intent)
+            finish()
+        }
+
+        binding.deleteIconButton.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Delete task")
+                .setMessage("Are you sure you want to delete this task?")
+                .setPositiveButton("Yes") { _, _ ->
+                    viewModel.task.value?.let {
+                        viewModel.deleteTask(it)
+                        Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
 
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
@@ -115,46 +215,37 @@ class DetailsActivity : AppCompatActivity() {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
+    }
 
-        // Set click listeners for status buttons
-        binding.notStartedIconButton.setOnClickListener {
-            binding.statusTextView.text = getString(R.string.not_started_text)
-            binding.statusTextView.setTextColor(getColor(R.color.light_gray))
-            Toast.makeText(this, "Status changed to Not Started!", Toast.LENGTH_SHORT).show()
-        }
+    /**
+     * Called when the activity is resumed.
+     * Checks if the task ID is valid and loads the corresponding task details.
+     */
+    override fun onResume() {
+        super.onResume()
+        taskId = intent.getStringExtra("taskId")
+        checkTaskId()
+    }
 
-        binding.inProgressIconButton.setOnClickListener {
-            binding.statusTextView.text = getString(R.string.in_progress_text)
-            binding.statusTextView.setTextColor(getColor(R.color.sky))
-            Toast.makeText(this, "Status changed to In Progress!", Toast.LENGTH_SHORT).show()
+    /**
+     * Checks if the task ID is valid and loads the corresponding task details.
+     */
+    private fun checkTaskId() {
+        if (taskId != null) {
+            viewModel.loadTaskById(taskId!!)
+        } else {
+            Toast.makeText(this, "Invalid task ID", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        binding.completeIconButton.setOnClickListener {
-            binding.statusTextView.text = getString(R.string.complete_text)
-            binding.statusTextView.setTextColor(getColor(R.color.emerald))
-            Toast.makeText(this, "Status changed to Complete!", Toast.LENGTH_SHORT).show()
-        }
-
-        // Set click listeners for edit, delete, and back buttons
-        binding.backIconButton.setOnClickListener {
-            finish()
-        }
-
-        binding.editIconButton.setOnClickListener {
-            startActivity(Intent(this, EditTaskActivity::class.java))
-        }
-
-        binding.deleteIconButton.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Delete task")
-                .setMessage("Are you sure you want to delete this task?")
-                .setPositiveButton("Yes") { _, _ ->
-                    Toast.makeText(this, "Task Deleted!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, ListActivity::class.java))
-                    finish()
-                }
-                .setNegativeButton("No", null)
-                .show()
-        }
+    /**
+     * Toggles the pin state of the task and updates the UI accordingly.
+     *
+     * @param pinState Boolean indicating the current pin state of the task.
+     */
+    private fun togglePinState(pinState: Boolean) {
+        binding.pinIconButton.setImageResource(
+            if (pinState) R.drawable.ic_pinned else R.drawable.ic_unpinned
+        )
     }
 }

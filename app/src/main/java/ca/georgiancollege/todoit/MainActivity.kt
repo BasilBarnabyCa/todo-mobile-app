@@ -1,13 +1,14 @@
-
 /** Author: Basil Barnaby
  * Student Number: 200540109
  * Course: COMP3025 - Mobile and Pervasive Computing
- * Assignment: 3 - Todo App Prototype
- * Date: July 22, 2024
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
  * Description: This is a todo app that allows users to add, edit, and delete tasks.
  * App Name: Todo.iT
  * Target Device: Google Pixel 8 Pro
- * Version: 0.1
+ * Version: 1.0
+ *
+ * Filename: MainActivity.kt
  */
 
 package ca.georgiancollege.todoit
@@ -15,129 +16,125 @@ package ca.georgiancollege.todoit
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityMainBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 /**
  * MainActivity serves as the entry point of the Todo.iT application.
  * It displays pinned and upcoming tasks, and handles navigation to other activities.
  *
- * @property binding The view binding for the main activity layout.
- * @property upcomingTasks Array of Task objects representing upcoming tasks.
- * @property pinnedTasks Array of Task objects representing pinned tasks.
+ * @property binding The view binding for the main activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing task-related data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
  */
-class MainActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener, PinnedTaskAdapter.OnTaskClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var upcomingTasks: Array<Task>
-    private lateinit var pinnedTasks: Array<Task>
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var dataManager: DataManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Sample data for pinned tasks
-        pinnedTasks = arrayOf(
-            Task("Personal", "Grocery Shopping", "Buy groceries for the week", "Complete", "", "July 10, 2024"),
-            Task("School", "Mobile Assignment 4", "Complete the design document and code for Todo app", "Not Started", "July 24, 2024", "July 1, 2024"),
-            Task("Work", "Complete Database Backups", "Revise DB back up schedule and perform backups", "In Progress", "July 25, 2024", "June 20, 2024")
-        )
+        // Initialize our Firestore and DataManager
+        FirebaseFirestore.setLoggingEnabled(true)
+        dataManager = DataManager.instance()
 
-        // Create and set the Pinned tasks adapter
-        val pinnedTaskAdapter = PinnedTaskAdapter(pinnedTasks, this)
+        // Adapter for the RecyclerView, with a click listener to open the DetailsActivity
+        val taskAdapter = TaskAdapter({ task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }, viewModel, this)
 
-        // Set the adapter and layout manager for the Pinned tasks RecyclerView
-        binding.pinnedTasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = pinnedTaskAdapter
+        val pinnedTaskAdapter = PinnedTaskAdapter { task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
         }
 
-        // Sample data for Upcoming tasks
-        upcomingTasks = arrayOf(
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "", "July 1, 2024"),
-            Task("Work", "Project Planning Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "", "July 10, 2024"),
-            Task("School", "Draft Research Paper", "Complete the draft for the research paper on environmental science", "Not Started", "July 27, 2024", "July 5, 2024"),
-        )
+        binding.pinnedTasksRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.pinnedTasksRecyclerView.adapter = pinnedTaskAdapter
 
-        // Create and set the adapter for the Upcoming tasks adapter
-        val upcomingTaskAdapter = TaskAdapter(upcomingTasks, this)
+        binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.tasksRecyclerView.adapter = taskAdapter
 
-        // Set the adapter and layout manager for the Upcoming tasks RecyclerView
-        binding.tasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = upcomingTaskAdapter
+        // Observe the LiveData from the ViewModel
+        viewModel.pinnedTasks.observe(this) { tasks ->
+            Log.d("TasksTracker", "Pinned Tasks: $tasks")
+            pinnedTaskAdapter.submitList(tasks)
         }
 
+        viewModel.upcomingTasks.observe(this) { tasks ->
+            Log.d("TasksTracker", "Upcoming Tasks: $tasks")
+            taskAdapter.submitList(tasks)
+        }
+
+        // Load all Tasks rom the database manager via viewModel
+        viewModel.loadPinnedTasks()
+        viewModel.loadUpcomingTasks()
+
+        setupEventHandlers()
+    }
+
+    /**
+     * Called when the activity resumes from a paused state.
+     * Reloads the pinned and upcoming tasks to ensure the data is up-to-date.
+     */
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPinnedTasks()
+        viewModel.loadUpcomingTasks()
+    }
+
+    /**
+     * Sets up event handlers for the SearchView and the menu bar buttons.
+     * Handles navigation to other activities based on user interactions.
+     */
+    private fun setupEventHandlers() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    val intent = Intent(this@MainActivity, ListActivity::class.java).apply {
+                        putExtra("searchQuery", it)
+                    }
+                    startActivity(intent)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+
+        // Set click listeners for menu bar buttons
         binding.menuBar.calendarButton.setOnClickListener {
-            Log.d("MenuBar", "Calendar button clicked")
-
             startActivity(Intent(this, CalendarActivity::class.java))
             finish()
         }
 
         binding.menuBar.addTaskButton.setOnClickListener {
-            Log.d("MenuBar", "Add task button clicked")
-
             startActivity(Intent(this, AddTaskActivity::class.java))
         }
 
         binding.menuBar.listButton.setOnClickListener {
-            Log.d("MenuBar", "List button clicked")
-
             startActivity(Intent(this, ListActivity::class.java))
             finish()
         }
 
         binding.menuBar.userProfileButton.setOnClickListener {
-            Log.d("MenuBar", "User profile button clicked")
-
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-    }
-
-    /**
-     * Called when a task card is clicked in the Pinned tasks RecyclerView.
-     *
-     * @param position The position of the clicked task card in the RecyclerView.
-     */
-    override fun onTaskCardClick(position: Int) {
-        Log.d("TaskAdapter", "Task card clicked at position: $position")
-
-        val task = pinnedTasks[position]
-
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("category", task.category)
-            putExtra("title", task.title)
-            putExtra("notes", task.notes)
-            putExtra("dueDate", task.dueDate)
-        }
-
-        startActivity(intent)
-    }
-
-    /**
-     * Called when a task is clicked in the Upcoming tasks RecyclerView.
-     *
-     * @param position The position of the clicked task in the RecyclerView.
-     */
-    override fun onTaskClick(position: Int) {
-        Log.d("TaskAdapter", "Task clicked at position: $position")
-
-        val task = upcomingTasks[position]
-
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("category", task.category)
-            putExtra("title", task.title)
-            putExtra("notes", task.notes)
-            putExtra("status", task.status)
-            putExtra("dueDate", task.dueDate)
-            putExtra("createDate", task.createDate)
-        }
-
-        startActivity(intent)
     }
 }

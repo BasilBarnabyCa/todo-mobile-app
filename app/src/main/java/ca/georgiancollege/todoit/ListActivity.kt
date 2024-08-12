@@ -1,52 +1,119 @@
+/** Author: Basil Barnaby
+ * Student Number: 200540109
+ * Course: COMP3025 - Mobile and Pervasive Computing
+ * Assignment: 4 - Todo App
+ * Date: August 11, 2024
+ * Description: This is a todo app that allows users to add, edit, and delete tasks.
+ * App Name: Todo.iT
+ * Target Device: Google Pixel 8 Pro
+ * Version: 1.0
+ *
+ * Filename: ListActivity.kt
+ */
+
 package ca.georgiancollege.todoit
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.georgiancollege.todoit.databinding.ActivityListBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 /**
- * ListActivity displays all tasks in a RecyclerView.
+ * ListActivity displays all tasks in a RecyclerView and provides search functionality to filter tasks.
  *
- * @property binding The view binding for the list activity layout.
- * @property allTasks Array of Task objects representing all tasks.
+ * @property binding The view binding for the list activity layout, providing access to UI elements.
+ * @property viewModel The ViewModel instance for managing and observing task data.
+ * @property dataManager A singleton instance of DataManager for managing task data interactions.
  */
-class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
+class ListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListBinding
-    private lateinit var allTasks: Array<Task>
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var dataManager: DataManager
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the UI components, sets up the RecyclerView adapter, and loads tasks based on search query or all tasks if no query is present.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Sample data for Upcoming tasks
-        allTasks = arrayOf(
-            Task("Fitness", "Morning Run", "Complete a 5km run in the park", "Not Started", "", "July 1, 2024"),
-            Task("Work", "Project Planning Meeting", "Discuss project milestones and deliverables with the team", "In Progress", "July 25, 2024", "June 20, 2024"),
-            Task("Personal", "Doctor's Appointment", "Annual physical check-up with Dr. Smith", "Complete", "", "July 10, 2024"),
-            Task("School", "Draft Research Paper", "Complete the draft for the research paper on environmental science", "Not Started", "July 27, 2024", "July 5, 2024"),
-            Task("Fitness", "Yoga Session", "Attend a yoga session at the local gym", "In Progress", "", "June 21, 2024"),
-            Task("Work", "Team Review Meeting", "Discuss project progress and address any issues", "Complete", "July 29, 2024", "June 22, 2024"),
-            Task("Personal", "Dentist Appointment", "Regular dental check-up", "Not Started", "July 30, 2024", "July 11, 2024"),
-            Task("School", "Literature Review", "Draft the literature review for the research paper", "In Progress", "", "July 6, 2024"),
-            Task("Fitness", "Cycling", "Complete a 20km cycling session", "Complete", "August 1, 2024", "June 23, 2024"),
-            Task("Work", "Client Meeting", "Discuss project requirements with the client", "Not Started", "", "June 24, 2024"),
-            Task("School", "Final Research Paper Submission", "Submit the final draft of the research paper", "Complete", "August 3, 2024", "July 12, 2024"),
-            Task("Personal", "Therapy Session", "Attend the scheduled therapy session", "In Progress", "August 4, 2024", "July 7, 2024")
-        )
+        // Initialize our Firestore and DataManager
+        FirebaseFirestore.setLoggingEnabled(true)
+        dataManager = DataManager.instance()
 
-        // Create and set the adapter for the Upcoming tasks adapter
-        val taskAdapter = TaskAdapter(allTasks, this)
+        val adapter = TaskAdapter ({task: Task ->
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra("taskId", task.id)
+            }
+            startActivity(intent)
+        }, viewModel, this)
 
-        // Set the adapter and layout manager for the Upcoming tasks RecyclerView
-        binding.tasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = taskAdapter
+        binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.tasksRecyclerView.adapter = adapter
+
+        // Get the search query from the intent
+        val searchQuery = intent.getStringExtra("searchQuery")
+        if (searchQuery != null) {
+            viewModel.searchTasks(searchQuery)
+        } else {
+            viewModel.loadAllTasks()
         }
+
+        // Observe the LiveData from the ViewModel
+        viewModel.tasks.observe(this) { tasks ->
+            adapter.submitList(tasks)
+        }
+
+        setupEventHandlers()
+    }
+
+    /**
+     * Called when the activity resumes from a paused state.
+     * Reloads all tasks if no search query is present to ensure the data is up-to-date.
+     */
+    override fun onResume() {
+        super.onResume()
+        val searchQuery = intent.getStringExtra("searchQuery")
+        if (searchQuery == null) {
+            viewModel.loadAllTasks()
+        }
+    }
+
+    /**
+     * Sets up event handlers for various UI elements, including the SearchView and menu bar buttons.
+     */
+    private fun setupEventHandlers() {
+        // Set up the SearchView
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.searchTasks(it)
+                }
+                return true
+            }
+
+            // Handle live changes in the search query
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    if (it.isEmpty()) {
+                        viewModel.loadAllTasks()
+                    } else {
+                        viewModel.searchTasks(it)
+                    }
+                }
+                return true
+            }
+        })
 
         // Set click listeners for menu bar buttons
         binding.menuBar.homeButton.setOnClickListener {
@@ -75,26 +142,5 @@ class ListActivity : AppCompatActivity(), TaskAdapter.OnTaskClickListener {
             startActivity(Intent(this, UserProfileActivity::class.java))
             finish()
         }
-    }
-
-    /**
-     * Handles the click event for tasks.
-     *
-     * @param position The position of the clicked task in allTasks array.
-     */
-    override fun onTaskClick(position: Int) {
-        Log.d("TaskAdapter", "Task clicked at position: $position")
-        val task = allTasks[position]
-
-        val intent = Intent(this, DetailsActivity::class.java).apply {
-            putExtra("category", task.category)
-            putExtra("title", task.title)
-            putExtra("notes", task.notes)
-            putExtra("status", task.status)
-            putExtra("dueDate", task.dueDate)
-            putExtra("createDate", task.createDate)
-        }
-
-        startActivity(intent)
     }
 }
