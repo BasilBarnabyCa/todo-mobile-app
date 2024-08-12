@@ -78,9 +78,17 @@ class PinnedTaskAdapter(private val listener: (Task) -> Unit) :
         val task = getItem(position)
         viewHolder.binding.taskCardCategoryTextView.text = task.category
         viewHolder.binding.taskCardTitleTextView.text = task.name
-        viewHolder.binding.taskCardNotesTextView.text = task.notes
 
-        // Date formatting
+// Limit the number of characters for notes
+        val maxNotesLength = 60
+        val notesText = if (task.notes.length > maxNotesLength) {
+            task.notes.substring(0, maxNotesLength) + "..."
+        } else {
+            task.notes
+        }
+        viewHolder.binding.taskCardNotesTextView.text = notesText
+
+// Date formatting
         val incomingDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val displayDateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val currentDate = Calendar.getInstance().time

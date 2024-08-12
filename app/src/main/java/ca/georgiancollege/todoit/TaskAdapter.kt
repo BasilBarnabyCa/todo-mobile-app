@@ -90,6 +90,14 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
             SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val currentDate = Calendar.getInstance().time
 
+        // Limit the number of characters for notes
+        val maxNotesLength = 50
+        val notesText = if (task.notes.length > maxNotesLength) {
+            task.notes.substring(0, maxNotesLength) + "..."
+        } else {
+            task.notes
+        }
+
         if (task.dueDate.isNotEmpty() && task.dueDate != "Please select a date") {
             val parsedDueDate = incomingDateFormat.parse(task.dueDate)
             val dueDate = if (task.hasDueDate && parsedDueDate != null) {
@@ -102,7 +110,7 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
              * Documentation for SpannableString:
              * https://developer.android.com/reference/android/text/Spannable
              */
-            val textToShow = "${task.notes} - $dueDate"
+            val textToShow = "$notesText - $dueDate"
             val spannableString = SpannableString(textToShow)
 
             val startIndex = textToShow.indexOf(dueDate)
@@ -120,7 +128,7 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
 
             viewHolder.binding.taskDateTimeTextView.text = spannableString
         } else {
-            viewHolder.binding.taskDateTimeTextView.text = task.notes
+            viewHolder.binding.taskDateTimeTextView.text = notesText
         }
 
         when (task.category) {
