@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ca.georgiancollege.todoit.databinding.ActivityEditTaskBinding
 import java.text.SimpleDateFormat
@@ -49,6 +50,7 @@ class EditTaskActivity : AppCompatActivity() {
     private var isPinned: Boolean = false
     private var createDate: String = ""
     private var calendar = Calendar.getInstance()
+    private lateinit var originalTask: Task
 
     /**
      * Called when the activity is first created.
@@ -74,6 +76,7 @@ class EditTaskActivity : AppCompatActivity() {
         // Observe the LiveData from the ViewModel
         viewModel.task.observe(this) { task ->
             task?.let {
+                originalTask = it.copy() // Create a copy of the original task for discard changes check
                 isPinned = task.pinned
                 createDate = task.createDate
                 binding.nameEditTextView.setText(task.name)
@@ -223,9 +226,42 @@ class EditTaskActivity : AppCompatActivity() {
 
         // Set click listeners for cancel and update buttons
         binding.cancelButton.setOnClickListener {
-            Log.d("CancelButton", "Cancel button clicked")
+            val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-            finish()
+            val currentTaskDueDate = if (binding.selectedDateLabelTextView.text.toString().isEmpty()) ""
+                else storageDateFormat.format(displayDateFormat.parse(binding.selectedDateLabelTextView.text.toString()))
+
+            // Create a new Task object with the current values
+            val currentTask = Task(
+                id = taskId ?: "",
+                name = binding.nameEditTextView.text.toString(),
+                notes = binding.notesEditTextView.text.toString(),
+                status = binding.statusSpinner.selectedItem.toString(),
+                category = binding.categorySpinner.selectedItem.toString(),
+                hasDueDate = binding.dueDateToggleSwitch.isChecked,
+                dueDate = currentTaskDueDate,
+                pinned = isPinned,
+                completed = originalTask.completed,
+                createDate = originalTask.createDate
+            )
+
+            // Check if the current task is different from the original task
+            if (currentTask != originalTask) {
+                AlertDialog.Builder(this)
+                    .setTitle("Discard Changes")
+                    .setMessage("You have unsaved changes. Are you sure you want to discard them?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        val intent = Intent(this, DetailsActivity::class.java)
+                        intent.putExtra("taskId", taskId)
+                        startActivity(intent)
+                        finish()
+                    }
+                    .setNegativeButton("No", null)
+                    .show()
+            } else {
+                finish()
+            }
         }
     }
 
@@ -268,48 +304,58 @@ class EditTaskActivity : AppCompatActivity() {
      * Updates the task with the current values from the UI and saves it to the database.
      */
     private fun updateTask() {
-        taskId?.let {
-            val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val name = binding.nameEditTextView.text.toString()
-            val notes = binding.notesEditTextView.text.toString()
-            val status = binding.statusSpinner.selectedItem.toString()
-            val category = binding.categorySpinner.selectedItem.toString()
-            val hasDueDate = binding.dueDateToggleSwitch.isChecked
-            val isCompleted = status == "Complete"
+        AlertDialog.Builder(this)
+            .setTitle("Update task")
+            .setMessage("Are you sure you want to update this task?")
+            .setPositiveButton("Yes") { _, _ ->
+                taskId?.let {
+                    val displayDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                    val storageDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val name = binding.nameEditTextView.text.toString()
+                    val notes = binding.notesEditTextView.text.toString()
+                    val status = binding.statusSpinner.selectedItem.toString()
+                    val category = binding.categorySpinner.selectedItem.toString()
+                    val hasDueDate = binding.dueDateToggleSwitch.isChecked
+                    val isCompleted = status == "Complete"
 
-            val dueDate = if (hasDueDate && binding.selectedDateLabelTextView.text.toString().isNotEmpty()) {
-                displayDateFormat.parse(binding.selectedDateLabelTextView.text.toString())?.let { date ->
-                    storageDateFormat.format(date)
-                } ?: ""
-            } else {
-                ""
+                    val dueDate =
+                        if (hasDueDate && binding.selectedDateLabelTextView.text.toString()
+                                .isNotEmpty()
+                        ) {
+                            displayDateFormat.parse(binding.selectedDateLabelTextView.text.toString())
+                                ?.let { date ->
+                                    storageDateFormat.format(date)
+                                } ?: ""
+                        } else {
+                            ""
+                        }
+
+                    val updatedTask = Task(
+                        id = it,
+                        name = name,
+                        notes = notes,
+                        status = status,
+                        category = category,
+                        hasDueDate = hasDueDate,
+                        dueDate = dueDate,
+                        pinned = isPinned,
+                        completed = isCompleted,
+                        createDate = createDate
+                    )
+
+                    viewModel.saveTask(updatedTask)
+                    Toast.makeText(this, "Task updated successfully!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, DetailsActivity::class.java)
+                    intent.putExtra("taskId", it)
+                    startActivity(intent)
+                    finish()
+                } ?: run {
+                    Toast.makeText(this, "Error updating task", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            val updatedTask = Task(
-                id = it,
-                name = name,
-                notes = notes,
-                status = status,
-                category = category,
-                hasDueDate = hasDueDate,
-                dueDate = dueDate,
-                pinned = isPinned,
-                completed = isCompleted,
-                createDate = createDate
-            )
-
-            viewModel.saveTask(updatedTask)
-            Toast.makeText(this, "Task updated successfully!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, DetailsActivity::class.java)
-            intent.putExtra("taskId", it)
-            startActivity(intent)
-            finish()
-        } ?: run {
-            Toast.makeText(this, "Error updating task", Toast.LENGTH_SHORT).show()
-        }
+            .setNegativeButton("No", null)
+            .show()
     }
-
 
 
 }
