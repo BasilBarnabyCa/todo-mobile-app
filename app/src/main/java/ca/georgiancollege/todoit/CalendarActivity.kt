@@ -69,7 +69,7 @@ class CalendarActivity : AppCompatActivity() {
 
         // Get the current date and load tasks for it
         val currentDate = Calendar.getInstance().time
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         formattedDate = dateFormat.format(currentDate)
 
         // Load all Tasks rom the database manager via viewModel
