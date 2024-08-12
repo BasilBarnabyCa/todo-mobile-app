@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("taskId", task.id)
             }
             startActivity(intent)
-        }, viewModel)
+        }, viewModel, this)
 
         val pinnedTaskAdapter = PinnedTaskAdapter { task: Task ->
             val intent = Intent(this, DetailsActivity::class.java).apply {

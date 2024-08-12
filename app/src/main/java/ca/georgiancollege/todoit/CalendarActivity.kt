@@ -57,7 +57,7 @@ class CalendarActivity : AppCompatActivity() {
                 putExtra("taskId", task.id)
             }
             startActivity(intent)
-        }, viewModel)
+        }, viewModel, this)
 
         binding.tasksRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.tasksRecyclerView.adapter = adapter

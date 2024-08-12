@@ -13,7 +13,11 @@
 
 package ca.georgiancollege.todoit
 
+import android.content.Context
 import android.graphics.Paint
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,6 +25,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskRowItemBinding
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 /**
@@ -31,7 +36,7 @@ import java.util.Locale
  * @param listener A lambda function that handles task click events.
  * @param viewModel The ViewModel instance used to save task status changes.
  */
-class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: TaskViewModel) :
+class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: TaskViewModel, private val context: Context) :
     ListAdapter<Task, TaskAdapter.ViewHolder>(TaskComparator()) {
 
     /**
@@ -83,19 +88,37 @@ class TaskAdapter(private val listener: (Task) -> Unit, private val viewModel: T
             SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val displayDateFormat =
             SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
 
         if (task.dueDate.isNotEmpty() && task.dueDate != "Please select a date") {
-            val dueDate = if (task.hasDueDate && task.dueDate.isNotEmpty()) {
-                incomingDateFormat.parse(task.dueDate)
-                    ?.let { date -> displayDateFormat.format(date) } ?: "Not set"
+            val parsedDueDate = incomingDateFormat.parse(task.dueDate)
+            val dueDate = if (task.hasDueDate && parsedDueDate != null) {
+                displayDateFormat.format(parsedDueDate)
             } else {
                 "Not set"
             }
-            viewHolder.binding.taskDateTimeTextView.text = buildString {
-                append(task.notes)
-                append(" - ")
-                append(dueDate)
+
+            /**
+             * Documentation for SpannableString:
+             * https://developer.android.com/reference/android/text/Spannable
+             */
+            val textToShow = "${task.notes} - $dueDate"
+            val spannableString = SpannableString(textToShow)
+
+            val startIndex = textToShow.indexOf(dueDate)
+            val endIndex = startIndex + dueDate.length
+
+            if (parsedDueDate != null && parsedDueDate.before(currentDate) && !task.completed) {
+                // Set the date text color to red if the due date is in the past and not complete
+                spannableString.setSpan(
+                    ForegroundColorSpan(context.getColor(R.color.red)),
+                    startIndex,
+                    endIndex,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
+
+            viewHolder.binding.taskDateTimeTextView.text = spannableString
         } else {
             viewHolder.binding.taskDateTimeTextView.text = task.notes
         }

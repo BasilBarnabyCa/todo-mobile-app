@@ -13,12 +13,19 @@
 
 package ca.georgiancollege.todoit
 
+import android.graphics.Typeface
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.georgiancollege.todoit.databinding.TaskCardBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * PinnedTaskAdapter is a RecyclerView adapter for displaying pinned tasks in a RecyclerView.
@@ -72,14 +79,76 @@ class PinnedTaskAdapter(private val listener: (Task) -> Unit) :
         viewHolder.binding.taskCardCategoryTextView.text = task.category
         viewHolder.binding.taskCardTitleTextView.text = task.name
         viewHolder.binding.taskCardNotesTextView.text = task.notes
-        viewHolder.binding.taskCardDateTextView.text = task.dueDate
+
+        // Date formatting
+        val incomingDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val displayDateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
+
+        if (task.dueDate.isNotEmpty()) {
+            val parsedDueDate = incomingDateFormat.parse(task.dueDate)
+            val dueDateText = if (parsedDueDate != null) {
+                displayDateFormat.format(parsedDueDate)
+            } else {
+                task.dueDate
+            }
+
+            val spannable = SpannableStringBuilder()
+            spannable.append(dueDateText)
+
+            if (parsedDueDate != null && parsedDueDate.before(currentDate)) {
+                // Add "LATE" in bold below the date if the due date is in the past
+                spannable.append("\n")
+                val start = spannable.length
+                spannable.append("LATE")
+                spannable.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    spannable.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+
+            viewHolder.binding.taskCardDateTextView.text = spannable
+        } else {
+            viewHolder.binding.taskCardDateTextView.text = ""
+        }
 
         when (task.category) {
-            "Fitness" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.emerald))
-            "Work" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.orange))
-            "School" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.purple))
-            "Personal" -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.sky))
-            else -> viewHolder.binding.taskCardView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.dark_slate))
+            "Fitness" -> viewHolder.binding.taskCardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewHolder.itemView.context,
+                    R.color.emerald
+                )
+            )
+
+            "Work" -> viewHolder.binding.taskCardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewHolder.itemView.context,
+                    R.color.orange
+                )
+            )
+
+            "School" -> viewHolder.binding.taskCardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewHolder.itemView.context,
+                    R.color.purple
+                )
+            )
+
+            "Personal" -> viewHolder.binding.taskCardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewHolder.itemView.context,
+                    R.color.sky
+                )
+            )
+
+            else -> viewHolder.binding.taskCardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewHolder.itemView.context,
+                    R.color.dark_slate
+                )
+            )
         }
     }
 }
