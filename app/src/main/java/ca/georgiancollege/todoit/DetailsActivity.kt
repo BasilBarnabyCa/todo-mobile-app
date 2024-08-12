@@ -99,9 +99,11 @@ class DetailsActivity : AppCompatActivity() {
                     else -> Log.e("DetailsActivity", "Invalid category: ${task.category}")
                 }
                 binding.categoryTextView.text = task.category
+
+                // Set the pin/unpin icon based on the current task state
+                togglePinState(task.pinned)
             }
         }
-
 
         setupEventHandlers()
     }
@@ -110,20 +112,45 @@ class DetailsActivity : AppCompatActivity() {
         // Set click listeners for status buttons
         binding.notStartedIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.not_started_text)
+            viewModel.task.value?.let {
+                it.status = "Not started"
+                viewModel.saveTask(it)
+            }
             binding.statusTextView.setTextColor(getColor(R.color.light_gray))
-            Toast.makeText(this, "Status changed to Not started!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Task marked as Not started!", Toast.LENGTH_SHORT).show()
         }
 
         binding.inProgressIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.in_progress_text)
+            viewModel.task.value?.let {
+                it.status = "In progress"
+                viewModel.saveTask(it)
+            }
             binding.statusTextView.setTextColor(getColor(R.color.sky))
-            Toast.makeText(this, "Status changed to In progress!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Task marked as In progress!", Toast.LENGTH_SHORT).show()
         }
 
         binding.completeIconButton.setOnClickListener {
             binding.statusTextView.text = getString(R.string.complete_text)
+            viewModel.task.value?.let {
+                it.status = "Complete"
+                viewModel.saveTask(it)
+            }
             binding.statusTextView.setTextColor(getColor(R.color.emerald))
-            Toast.makeText(this, "Status changed to Complete!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Task marked as Complete!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.pinIconButton.setOnClickListener {
+            viewModel.task.value?.let {
+                it.pinned = !it.pinned
+                viewModel.saveTask(it)
+                togglePinState(it.pinned)
+                Toast.makeText(
+                    this,
+                    if (it.pinned) "Task pinned!" else "Task unpinned!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         // Set click listeners for edit, delete, and back buttons
@@ -190,17 +217,35 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Called when the activity is resumed.
+     * Checks if the task ID is valid and loads the corresponding task details.
+     */
     override fun onResume() {
         super.onResume()
         taskId = intent.getStringExtra("taskId")
         checkTaskId()
     }
 
+    /**
+     * Checks if the task ID is valid and loads the corresponding task details.
+     */
     private fun checkTaskId() {
         if (taskId != null) {
             viewModel.loadTaskById(taskId!!)
         } else {
             Toast.makeText(this, "Invalid task ID", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * Toggles the pin state of the task and updates the UI accordingly.
+     *
+     * @param pinState Boolean indicating the current pin state of the task.
+     */
+    private fun togglePinState(pinState: Boolean) {
+        binding.pinIconButton.setImageResource(
+            if (pinState) R.drawable.ic_pinned else R.drawable.ic_unpinned
+        )
     }
 }

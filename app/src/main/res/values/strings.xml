@@ -82,4 +82,7 @@
     <string name="complete_text">Completed</string>
     <string name="back_icon_description">Go back to the previous screen</string>
     <string name="pin_icon_icon_description">Pin icon</string>
+    <string name="not_started_icon_description">Not started icon</string>
+    <string name="in_progress_icon_description">"In progress icon "</string>
+    <string name="complete_icon_description">Complete icon</string>
 </resources>
